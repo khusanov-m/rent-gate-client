@@ -1,113 +1,275 @@
-import Image from 'next/image'
+"use client";
+
+import { DatePickerWithPresets } from "@/components/DatePickerWithPresets";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import Image from "next/image";
+import Link from "next/link";
+import * as React from "react";
 
 export default function Home() {
+  const [startDate, setStartDate] = React.useState<Date>();
+  const [endDate, setEndDate] = React.useState<Date>();
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    <>
+      <div className="flex flex-col min-h-screen">
+        <header className="relative h-[600px] bg-[#f5f5f5]">
+          <Image
+            alt="Hero"
+            className="absolute inset-0 object-cover w-full h-full"
+            height="600"
+            src="/placeholder.svg"
+            style={{
+              aspectRatio: "1920/600",
+              objectFit: "cover",
+            }}
+            width="1920"
+          />
+          <div className="relative z-10 px-4 py-12 md:px-6 lg:px-8 max-w-screen-xl mx-auto">
+            <h1 className="text-4xl font-bold text-white">
+              Rent the perfect vehicle for your needs
+            </h1>
+            <p className="mt-2 text-lg text-white">
+              Enter your location and desired rental dates below.
+            </p>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <Input
+                className={buttonVariants({
+                  variant: "outline",
+                })}
+                placeholder="Location"
+              />
+              <DatePickerWithPresets
+                className="w-full"
+                date={startDate}
+                setDate={setStartDate}
+              />
+              <DatePickerWithPresets
+                className="w-full"
+                date={endDate}
+                setDate={setEndDate}
+              />
+              <Button className="md:col-span-3">Search</Button>
+            </div>
+          </div>
+        </header>
+        <main className="flex-1 px-4 py-12 md:px-6 lg:px-8 max-w-screen-xl mx-auto">
+          <h2 className="text-2xl font-bold">Vehicle Categories</h2>
+          <div className="mt-6 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <Card>
+              <CardContent className="flex items-center gap-4 pt-6">
+                <CarIcon className="h-6 w-6" />
+                <span>Cars</span>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="flex items-center gap-4 pt-6">
+                <BikeIcon className="h-6 w-6" />
+                <span>Motorcycles</span>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="flex items-center gap-4 pt-6">
+                <TruckIcon className="h-6 w-6" />
+                <span>Trucks</span>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="flex items-center gap-4 pt-6">
+                <BusIcon className="h-6 w-6" />
+                <span>Buses</span>
+              </CardContent>
+            </Card>
+          </div>
+          <h2 className="mt-12 text-2xl font-bold">Featured Vehicles</h2>
+          <div className="mt-6 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <Card>
+              <CardContent>
+                <Image
+                  alt="Vehicle"
+                  className="w-full h-48 object-cover"
+                  height="200"
+                  src="/placeholder.svg"
+                  style={{
+                    aspectRatio: "300/200",
+                    objectFit: "cover",
+                  }}
+                  width="300"
+                />
+                <h3 className="mt-4 text-lg font-bold">Sedan Car</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Comfortable and fuel-efficient.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent>
+                <Image
+                  alt="Vehicle"
+                  className="w-full h-48 object-cover"
+                  height="200"
+                  src="/placeholder.svg"
+                  style={{
+                    aspectRatio: "300/200",
+                    objectFit: "cover",
+                  }}
+                  width="300"
+                />
+                <h3 className="mt-4 text-lg font-bold">Sport Motorcycle</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Fast and thrilling.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent>
+                <Image
+                  alt="Vehicle"
+                  className="w-full h-48 object-cover"
+                  height="200"
+                  src="/placeholder.svg"
+                  style={{
+                    aspectRatio: "300/200",
+                    objectFit: "cover",
+                  }}
+                  width="300"
+                />
+                <h3 className="mt-4 text-lg font-bold">Pickup Truck</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Strong and spacious.
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent>
+                <Image
+                  alt="Vehicle"
+                  className="w-full h-48 object-cover"
+                  height="200"
+                  src="/placeholder.svg"
+                  style={{
+                    aspectRatio: "300/200",
+                    objectFit: "cover",
+                  }}
+                  width="300"
+                />
+                <h3 className="mt-4 text-lg font-bold">Tour Bus</h3>
+                <p className="mt-2 text-sm text-gray-500">
+                  Perfect for group travels.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+        <footer className="bg-gray-100 dark:bg-gray-800">
+          <div className="px-4 py-12 md:px-6 lg:px-8 max-w-screen-xl mx-auto">
+            <h2 className="text-2xl font-bold">
+              Ready to find your perfect ride?
+            </h2>
+            <p className="mt-2 text-lg">
+              Sign up now and explore our vast selection of vehicles.
+            </p>
+            <div className="mt-6">
+              <Link className={buttonVariants()} href={"/auth"}>
+                Sign Up
+              </Link>
+            </div>
+          </div>
+        </footer>
       </div>
+    </>
+  );
+}
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+function BikeIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="18.5" cy="17.5" r="3.5" />
+      <circle cx="5.5" cy="17.5" r="3.5" />
+      <circle cx="15" cy="5" r="1" />
+      <path d="M12 17.5V14l-3-3 4-3 2 3h2" />
+    </svg>
+  );
+}
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+function BusIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M8 6v6" />
+      <path d="M15 6v6" />
+      <path d="M2 12h19.6" />
+      <path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3" />
+      <circle cx="7" cy="18" r="2" />
+      <path d="M9 18h5" />
+      <circle cx="16" cy="18" r="2" />
+    </svg>
+  );
+}
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+function CarIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
+      <circle cx="7" cy="17" r="2" />
+      <path d="M9 17h6" />
+      <circle cx="17" cy="17" r="2" />
+    </svg>
+  );
+}
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+function TruckIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 18H3c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1h10c.6 0 1 .4 1 1v11" />
+      <path d="M14 9h4l4 4v4c0 .6-.4 1-1 1h-2" />
+      <circle cx="7" cy="18" r="2" />
+      <path d="M15 18H9" />
+      <circle cx="17" cy="18" r="2" />
+    </svg>
+  );
 }
