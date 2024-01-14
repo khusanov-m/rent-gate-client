@@ -68,9 +68,7 @@ export function DatePickerWithPresets({
             mode="single"
             selected={date}
             onSelect={setDate}
-            disabled={(date) =>
-              date > new Date() || date < new Date("1900-01-01")
-            }
+            disabled={(date) => date < new Date()}
             initialFocus
           />
         </div>

@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { Button } from "../ui/button";
+import Link from "next/link";
+import { buttonVariants } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 
 const VehicleDetails = ({
@@ -17,40 +18,10 @@ const VehicleDetails = ({
   numberFormatter: Intl.NumberFormat;
 }) => {
   return (
-    // <div className="relative group">
-    //   <Link className="absolute inset-0 z-10" href={`/${vehicle.id}`}>
-    //     <span className="sr-only">View</span>
-    //   </Link>
-    //   <Image
-    //     alt="Vehicle Image"
-    //     className="rounded-lg object-cover w-full aspect-square group-hover:opacity-50 transition-opacity"
-    //     height={200}
-    //     src="/placeholder.svg"
-    //     width={200}
-    //   />
-    //   <div className="flex-1 py-4">
-    //     <h3 className="font-semibold tracking-tight">{vehicle.name}</h3>
-    //     <small className="text-sm leading-none text-gray-500 dark:text-gray-400">
-    //       {vehicle.description}
-    //     </small>
-    //     <h4 className="font-semibold">
-    //       {vehicle.currency} {numberFormatter.format(vehicle.pricePerDay)}
-    //     </h4>
-    //     <p
-    //       className={cn(
-    //         vehicle.availability === "Available"
-    //           ? "text-green-500"
-    //           : "text-red-500"
-    //       )}
-    //     >
-    //       {vehicle.availability}
-    //     </p>
-    //   </div>
-    // </div>
-    <Card>
+    <Card className="relative group">
       <Image
         alt="Vehicle Image"
-        className="object-cover w-full h-48 rounded-t-lg"
+        className="object-cover w-full h-48 rounded-t-lg group-hover:opacity-50 transition-opacity"
         height="200"
         src="/placeholder.svg"
         style={{
@@ -59,14 +30,25 @@ const VehicleDetails = ({
         }}
         width="300"
       />
-      <CardContent>
+      <CardContent className="pt-4">
         <h3 className="font-semibold text-lg">{vehicle.name}</h3>
         <p className="text-gray-500 text-sm">{vehicle.description}</p>
         <div className="flex items-center justify-between mt-4">
           <span className="font-bold text-lg">
             {vehicle.currency} {numberFormatter.format(vehicle.pricePerDay)}/day
           </span>
-          <Button variant="outline">Book Now</Button>
+          <Link
+            href={
+              vehicle.availability === "Available"
+                ? `vehicles/${vehicle.id}`
+                : "#"
+            }
+            className={buttonVariants({ variant: "outline" })}
+          >
+            {vehicle.availability === "Available"
+              ? "Book Now"
+              : "Currently Unavailable"}
+          </Link>
         </div>
       </CardContent>
     </Card>

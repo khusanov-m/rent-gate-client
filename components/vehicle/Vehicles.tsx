@@ -11,8 +11,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { LineHeightIcon } from "@radix-ui/react-icons";
 import { useSearchParams } from "next/navigation";
 import * as React from "react";
+import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import VehicleDetails from "./VehicleDetails";
 
 const vehicleTypes = [
@@ -288,7 +297,7 @@ const Vehicles = () => {
                 </div>
                 <div>
                   <Label htmlFor="vehicle-type">Vehicle Type</Label>
-                  <Select id="vehicle-type">
+                  <Select>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a type" />
                     </SelectTrigger>
@@ -306,13 +315,47 @@ const Vehicles = () => {
                 </div>
                 <div>
                   <Label htmlFor="availability">Availability</Label>
-                  <div />
                 </div>
               </div>
             </CardContent>
           </Card>
         </aside>
-        <main className="lg:col-span-2">
+        <main className="lg:col-span-2 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex space-x-4">
+              <span className="text-sm text-gray-500">
+                Showing 1-10 of 100 results
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="sm:ml-auto shrink-0" variant="outline">
+                    <LineHeightIcon className="w-4 h-4 mr-2" />
+                    Sort by
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-[200px]">
+                  <DropdownMenuRadioGroup value="featured">
+                    <DropdownMenuRadioItem value="featured">
+                      Featured
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="Newest">
+                      Newest
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="low">
+                      Price: Low to High
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="high">
+                      Price: High to Low
+                    </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button variant="outline">Reset</Button>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {vehicles.map((vehicle) => (
               <VehicleDetails

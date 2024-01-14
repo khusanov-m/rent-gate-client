@@ -41,13 +41,23 @@ const Navbar = () => {
             ) : (
               <>
                 <Link
-                  href="/profile"
+                  href={"pricing"}
                   className={buttonVariants({
                     variant: "ghost",
                     size: "sm",
                   })}
                 >
-                  Profile
+                  Pricing
+                </Link>
+
+                <Link
+                  href={"contacts"}
+                  className={buttonVariants({
+                    variant: "ghost",
+                    size: "sm",
+                  })}
+                >
+                  Contacts
                 </Link>
 
                 <UserAccountNav

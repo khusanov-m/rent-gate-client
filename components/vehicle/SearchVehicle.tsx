@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { DatePickerWithPresets } from "../DatePickerWithPresets";
@@ -22,10 +23,10 @@ const SearchVehicle = () => {
   };
 
   return (
-    <div className="mt-6 grid gap-4 md:grid-cols-3">
+    <div className="mt-6 grid gap-4 md:grid-cols-2 w-full">
       <Input
-        placeholder="pick-up"
-        className={buttonVariants({ variant: "outline" })}
+        placeholder="pick-up "
+        className={cn(buttonVariants({ variant: "outline" }), "md:col-span-2")}
         value={pickup}
         onChange={(e) => setPickup(e.target.value)}
       />
@@ -39,7 +40,7 @@ const SearchVehicle = () => {
         date={endDate}
         setDate={setEndDate}
       />
-      <Button onClick={onSubmit} className="md:col-span-3">
+      <Button onClick={onSubmit} className="md:col-span-2">
         Search
       </Button>
     </div>
