@@ -1,25 +1,23 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
-import { PlusIcon } from "@radix-ui/react-icons";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 import { useSearchParams } from "next/navigation";
 import * as React from "react";
 import VehicleDetails from "./VehicleDetails";
 
 const vehicleTypes = [
   {
-    type: "Motorbike",
+    type: "Motorbikes",
     list: [
       "Scooter",
       "Moped",
@@ -33,7 +31,7 @@ const vehicleTypes = [
     ],
   },
   {
-    type: "Car",
+    type: "Cars",
     list: [
       "Sedan",
       "SUV",
@@ -124,15 +122,15 @@ const demovehicles = [
 const Vehicles = () => {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
-  const vehicleTypeParam = type === "Car" ? ["Sedan"] : type ? [type] : [];
+  const vehicleTypeParam =
+    vehicleTypes.find((v) => v.type === type)?.list || [];
 
-  const [numberFormatter] = React.useState(
-    () =>
-      new Intl.NumberFormat(window.navigator.language, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
-  );
+  const [numberFormatter] = React.useState(() => {
+    return new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  });
 
   const [vehicleTypeFilter, setVehicleTypeFilter] =
     React.useState<string[]>(vehicleTypeParam);
@@ -161,110 +159,172 @@ const Vehicles = () => {
     });
   }, [vehicleTypeFilter, priceRangeFilter, availabilityFilter]);
 
-  console.log(vehicles);
-
   return (
-    <section className="container pt-6 px-4 md:px-6 grid gap-10 items-start">
-      <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
-        <div className="text-sm font-semibold pl-4 sm:pl-0">Filter: </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="link">
-              Vehicle Type: {vehicleTypeFilterParam}
-              <PlusIcon className="w-4 h-4 ml-2" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <ScrollArea className="h-80 w-48">
-              {vehicleTypes.map((vehicle) => (
-                <div key={vehicle.type}>
-                  <DropdownMenuLabel>{vehicle.type}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {vehicle.list.map((item) => (
-                    <DropdownMenuCheckboxItem
-                      key={item}
-                      checked={vehicleTypeFilter?.includes(item)}
-                      onCheckedChange={(checked) => {
-                        return checked
-                          ? setVehicleTypeFilter((val) => [...val, item])
-                          : setVehicleTypeFilter((val) =>
-                              val?.filter((value) => value !== item)
-                            );
-                      }}
-                    >
-                      {item}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                </div>
-              ))}
-            </ScrollArea>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="link">
-              Price Range
-              <PlusIcon className="w-4 h-4 ml-2" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            {priceRanges.map((item) => (
-              <DropdownMenuCheckboxItem
-                key={item}
-                checked={priceRangeFilter?.includes(item)}
-                onCheckedChange={(checked) => {
-                  return checked
-                    ? setPriceRangeFilter((val) => [...val, item])
-                    : setPriceRangeFilter((val) =>
-                        val?.filter((value) => value !== item)
-                      );
-                }}
-              >
-                {item}
-              </DropdownMenuCheckboxItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="link">
-              Availability
-              <PlusIcon className="w-4 h-4 ml-2" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuRadioGroup
-              value={availabilityFilter}
-              onValueChange={(val) => {
-                if (availabilityFilter === val) {
-                  setAvailabilityFilter("");
-                } else {
-                  setAvailabilityFilter(val);
-                }
-              }}
-            >
-              {availability.map((item) => (
-                <DropdownMenuRadioItem key={item} value={item}>
-                  {item}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+    // <section className="container pt-6 px-4 md:px-6 grid gap-10 items-start">
+    //   <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+    //     <div className="text-sm font-semibold pl-4 sm:pl-0">Filter: </div>
+    //     <DropdownMenu>
+    //       <DropdownMenuTrigger asChild>
+    //         <Button variant="link">
+    //           Vehicle Type: {vehicleTypeFilterParam}
+    //           <PlusIcon className="w-4 h-4 ml-2" />
+    //         </Button>
+    //       </DropdownMenuTrigger>
+    //       <DropdownMenuContent align="start">
+    //         <ScrollArea className="h-80 w-48">
+    //           {vehicleTypes.map((vehicle) => (
+    //             <div key={vehicle.type}>
+    //               <DropdownMenuLabel
+    //                 onClick={() => {
+    //                   setVehicleTypeFilter(vehicle.list);
+    //                 }}
+    //               >
+    //                 {vehicle.type}
+    //               </DropdownMenuLabel>
+    //               <DropdownMenuSeparator />
+    //               {vehicle.list.map((item) => (
+    //                 <DropdownMenuCheckboxItem
+    //                   key={item}
+    //                   checked={vehicleTypeFilter?.includes(item)}
+    //                   onCheckedChange={(checked) => {
+    //                     return checked
+    //                       ? setVehicleTypeFilter((val) => [...val, item])
+    //                       : setVehicleTypeFilter((val) =>
+    //                           val?.filter((value) => value !== item)
+    //                         );
+    //                   }}
+    //                 >
+    //                   {item}
+    //                 </DropdownMenuCheckboxItem>
+    //               ))}
+    //             </div>
+    //           ))}
+    //         </ScrollArea>
+    //       </DropdownMenuContent>
+    //     </DropdownMenu>
+    //     <DropdownMenu>
+    //       <DropdownMenuTrigger asChild>
+    //         <Button variant="link">
+    //           Price Range
+    //           <PlusIcon className="w-4 h-4 ml-2" />
+    //         </Button>
+    //       </DropdownMenuTrigger>
+    //       <DropdownMenuContent align="start">
+    //         {priceRanges.map((item) => (
+    //           <DropdownMenuCheckboxItem
+    //             key={item}
+    //             checked={priceRangeFilter?.includes(item)}
+    //             onCheckedChange={(checked) => {
+    //               return checked
+    //                 ? setPriceRangeFilter((val) => [...val, item])
+    //                 : setPriceRangeFilter((val) =>
+    //                     val?.filter((value) => value !== item)
+    //                   );
+    //             }}
+    //           >
+    //             {item}
+    //           </DropdownMenuCheckboxItem>
+    //         ))}
+    //       </DropdownMenuContent>
+    //     </DropdownMenu>
+    //     <DropdownMenu>
+    //       <DropdownMenuTrigger asChild>
+    //         <Button variant="link">
+    //           Availability
+    //           <PlusIcon className="w-4 h-4 ml-2" />
+    //         </Button>
+    //       </DropdownMenuTrigger>
+    //       <DropdownMenuContent align="start">
+    //         <DropdownMenuRadioGroup
+    //           value={availabilityFilter}
+    //           onValueChange={(val) => {
+    //             if (availabilityFilter === val) {
+    //               setAvailabilityFilter("");
+    //             } else {
+    //               setAvailabilityFilter(val);
+    //             }
+    //           }}
+    //         >
+    //           {availability.map((item) => (
+    //             <DropdownMenuRadioItem key={item} value={item}>
+    //               {item}
+    //             </DropdownMenuRadioItem>
+    //           ))}
+    //         </DropdownMenuRadioGroup>
+    //       </DropdownMenuContent>
+    //     </DropdownMenu>
+    //   </div>
 
-      <div className="grid gap-6 md:gap-8">
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {vehicles.map((vehicle) => (
-            <VehicleDetails
-              key={vehicle.id}
-              vehicle={vehicle}
-              numberFormatter={numberFormatter}
-            />
-          ))}
-        </div>
+    //   <div className="grid gap-6 md:gap-8">
+    //     <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
+    //       {vehicles.map((vehicle) => (
+    //         <VehicleDetails
+    //           key={vehicle.id}
+    //           vehicle={vehicle}
+    //           numberFormatter={numberFormatter}
+    //         />
+    //       ))}
+    //     </div>
+    //   </div>
+    // </section>
+    <div className="container mx-auto px-4 md:px-6 py-8">
+      <header className="mb-6">
+        <h1 className="text-3xl font-bold">Find Your Perfect Ride</h1>
+        <p className="text-gray-500">
+          Choose from a wide range of vehicles for your next adventure.
+        </p>
+      </header>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <aside className="lg:col-span-1">
+          <Card>
+            <CardHeader>
+              <CardTitle>Filter Vehicles</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="price-range">Price Range</Label>
+                  <Slider id="price-range" max={500} min={0} step={10} />
+                </div>
+                <div>
+                  <Label htmlFor="vehicle-type">Vehicle Type</Label>
+                  <Select id="vehicle-type">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="car">Car</SelectItem>
+                      <SelectItem value="motorcycle">Motorcycle</SelectItem>
+                      <SelectItem value="rv">RV</SelectItem>
+                      <SelectItem value="boat">Boat</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="location">Location</Label>
+                  <Input id="location" placeholder="Enter a location" />
+                </div>
+                <div>
+                  <Label htmlFor="availability">Availability</Label>
+                  <div />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </aside>
+        <main className="lg:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {vehicles.map((vehicle) => (
+              <VehicleDetails
+                key={vehicle.id}
+                vehicle={vehicle}
+                numberFormatter={numberFormatter}
+              />
+            ))}
+          </div>
+        </main>
       </div>
-    </section>
+    </div>
   );
 };
 
