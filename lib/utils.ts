@@ -46,7 +46,6 @@ export function constructMetadata({
     },
     icons,
     metadataBase: new URL("https://rent-gate.uz"),
-    themeColor: "#FFF",
     ...(noIndex && {
       robots: {
         index: false,

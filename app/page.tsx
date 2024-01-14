@@ -1,25 +1,25 @@
-"use client";
+// "use client";
 
-import { DatePickerWithPresets } from "@/components/DatePickerWithPresets";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import SearchVehicle from "@/components/vehicle/SearchVehicle";
 import Image from "next/image";
 import Link from "next/link";
-import * as React from "react";
 
 export default function Home() {
-  const [startDate, setStartDate] = React.useState<Date>();
-  const [endDate, setEndDate] = React.useState<Date>();
+  // const [startDate, setStartDate] = React.useState<Date>();
+  // const [endDate, setEndDate] = React.useState<Date>();
+
   return (
     <>
       <div className="flex flex-col min-h-screen">
         <header className="relative h-[600px] bg-[#f5f5f5]">
           <Image
-            alt="Hero"
+            alt="A modern and sophisticated vehicle showcase, set on a private, elegantly designed road. The scene is arranged like an exclusive exhibition, with a variety of vehicles lined up in a presentable manner. The lineup includes a sleek motorbike, a stylish car, a robust SUV, a large truck, and a spacious bus, each positioned to highlight its unique features. The road has a luxurious feel, with ambient lighting and a clean, minimalist design, creating an atmosphere of a high-end vehicle showcase rather than a public road. The style is modern, realistic, and refined, emphasizing the exclusivity of the setting."
             className="absolute inset-0 object-cover w-full h-full"
             height="600"
-            src="/placeholder.svg"
+            src="/home_main.png"
+            priority={true}
             style={{
               aspectRatio: "1920/600",
               objectFit: "cover",
@@ -33,55 +33,46 @@ export default function Home() {
             <p className="mt-2 text-lg text-white">
               Enter your location and desired rental dates below.
             </p>
-            <div className="mt-6 grid gap-4 md:grid-cols-3">
-              <Input
-                className={buttonVariants({
-                  variant: "outline",
-                })}
-                placeholder="Location"
-              />
-              <DatePickerWithPresets
-                className="w-full"
-                date={startDate}
-                setDate={setStartDate}
-              />
-              <DatePickerWithPresets
-                className="w-full"
-                date={endDate}
-                setDate={setEndDate}
-              />
-              <Button className="md:col-span-3">Search</Button>
-            </div>
+            <SearchVehicle />
           </div>
         </header>
-        <main className="flex-1 px-4 py-12 md:px-6 lg:px-8 max-w-screen-xl mx-auto">
+        <section className="flex-1 px-4 py-12 md:px-6 lg:px-8 max-w-screen-xl mx-auto">
           <h2 className="text-2xl font-bold">Vehicle Categories</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             <Card>
-              <CardContent className="flex items-center gap-4 pt-6">
-                <CarIcon className="h-6 w-6" />
-                <span>Cars</span>
-              </CardContent>
+              <Link href={"/vehicles?type=Cars"}>
+                <CardContent className="flex items-center gap-4 pt-6">
+                  <CarIcon className="h-6 w-6" />
+                  <span>Cars</span>
+                </CardContent>
+              </Link>
             </Card>
             <Card>
-              <CardContent className="flex items-center gap-4 pt-6">
-                <BikeIcon className="h-6 w-6" />
-                <span>Motorcycles</span>
-              </CardContent>
+              <Link href={"/vehicles?type=Motorbikes"}>
+                <CardContent className="flex items-center gap-4 pt-6">
+                  <BikeIcon className="h-6 w-6" />
+                  <span>Motorbikes</span>
+                </CardContent>
+              </Link>
             </Card>
             <Card>
-              <CardContent className="flex items-center gap-4 pt-6">
-                <TruckIcon className="h-6 w-6" />
-                <span>Trucks</span>
-              </CardContent>
+              <Link href={"/vehicles?type=Trucks"}>
+                <CardContent className="flex items-center gap-4 pt-6">
+                  <TruckIcon className="h-6 w-6" />
+                  <span>Trucks</span>
+                </CardContent>
+              </Link>
             </Card>
             <Card>
-              <CardContent className="flex items-center gap-4 pt-6">
-                <BusIcon className="h-6 w-6" />
-                <span>Buses</span>
-              </CardContent>
+              <Link href={"/vehicles?type=Buses"}>
+                <CardContent className="flex items-center gap-4 pt-6">
+                  <BusIcon className="h-6 w-6" />
+                  <span>Buses</span>
+                </CardContent>
+              </Link>
             </Card>
           </div>
+
           <h2 className="mt-12 text-2xl font-bold">Featured Vehicles</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             <Card>
@@ -161,7 +152,7 @@ export default function Home() {
               </CardContent>
             </Card>
           </div>
-        </main>
+        </section>
         <footer className="bg-gray-100 dark:bg-gray-800">
           <div className="px-4 py-12 md:px-6 lg:px-8 max-w-screen-xl mx-auto">
             <h2 className="text-2xl font-bold">
@@ -171,7 +162,7 @@ export default function Home() {
               Sign up now and explore our vast selection of vehicles.
             </p>
             <div className="mt-6">
-              <Link className={buttonVariants()} href={"/auth"}>
+              <Link className={buttonVariants()} href={"/sign-up"}>
                 Sign Up
               </Link>
             </div>

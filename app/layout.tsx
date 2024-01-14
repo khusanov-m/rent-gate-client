@@ -18,10 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <Providers>
         <body
-          className={cn(
-            "min-h-screen font-sans antialiased grainy",
-            inter.className
-          )}
+          className={cn("min-h-screen font-sans antialiased", inter.className)}
         >
           <Toaster />
           <Navbar />
