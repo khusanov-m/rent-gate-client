@@ -7,36 +7,55 @@ import { Card, CardContent } from "../ui/card";
 
 const VehicleDetails = ({
   vehicle,
-  numberFormatter,
+  isForm,
 }: {
   vehicle: {
     id: string;
+    type: string;
     name: string;
     description: string;
-    pricePerDay: number;
-    pricePerHour: number;
+    price_per_day: number;
+    price_per_hour: number;
     currency: string;
     availability: string;
+    color: string;
   };
-  numberFormatter: Intl.NumberFormat;
+  isForm?: boolean;
 }) => {
+  const numberFormatter = new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
   return (
-    <Card className="relative group">
-      <Image
-        alt="Vehicle Image"
-        className="object-cover w-full h-48 rounded-t-lg group-hover:opacity-50 transition-opacity"
-        height="200"
-        src="/sedan.png"
-        style={{
-          aspectRatio: "300/200",
-          objectFit: "cover",
-        }}
-        width="300"
-      />
+    <Card className="relative group overflow-hidden">
+      <div className="relative">
+        <Image
+          alt="Vehicle Image"
+          className="object-cover w-full h-48 rounded-t-lg group-hover:opacity-50 transition-opacity"
+          height="200"
+          src={`/${vehicle.type}.png`}
+          style={{
+            aspectRatio: "300/200",
+            objectFit: "cover",
+          }}
+          width="300"
+        />
+        <span
+          className={cn(
+            "w-8 h-8 rounded-full inline-block absolute -top-3 -right-3"
+          )}
+          style={{
+            backgroundColor: `${vehicle.color}`,
+          }}
+        ></span>
+      </div>
       <CardContent className="pt-4">
         <h3 className="font-semibold text-lg">{vehicle.name}</h3>
-        <p className="text-gray-500 text-sm mb-3">{vehicle.description}</p>
-        <div className="text-sm flex items-center gap-4">
+        <p className="text-gray-500 text-sm mb-3">
+          {vehicle.description} / 2023
+        </p>
+        <div className="text-sm flex-wrap justify-center sm:justify-start flex items-center gap-4">
           <p className="flex gap-2">
             <UsersRound size={"20"} /> 5
           </p>
@@ -56,30 +75,33 @@ const VehicleDetails = ({
         <div className="flex items-center justify-between mt-4">
           <div>
             <p className="font-bold text-lg">
-              {vehicle.currency} {numberFormatter.format(vehicle.pricePerDay)}
+              {vehicle.currency} {numberFormatter.format(vehicle.price_per_day)}
               /day
             </p>
             <p className="text-xs">
-              {vehicle.currency} {numberFormatter.format(vehicle.pricePerHour)}
+              {vehicle.currency}{" "}
+              {numberFormatter.format(vehicle.price_per_hour)}
               /hour
             </p>
           </div>
-          <Link
-            href={
-              vehicle.availability === "Available"
-                ? `vehicles/${vehicle.id}`
-                : "#"
-            }
-            className={cn(
-              buttonVariants({ variant: "outline" }),
-              vehicle.availability !== "Available" &&
-                "pointer-events-none opacity-50 cursor-not-allowed"
-            )}
-          >
-            {vehicle.availability === "Available"
-              ? "Book Now"
-              : "Currently Unavailable"}
-          </Link>
+          {!isForm && (
+            <Link
+              href={
+                vehicle.availability === "Available"
+                  ? `vehicles/${vehicle.id}`
+                  : "#"
+              }
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                vehicle.availability !== "Available" &&
+                  "opacity-50 cursor-not-allowed"
+              )}
+            >
+              {vehicle.availability === "Available"
+                ? "Book Now"
+                : "Currently Unavailable"}
+            </Link>
+          )}
         </div>
       </CardContent>
     </Card>

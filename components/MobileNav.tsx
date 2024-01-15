@@ -36,9 +36,9 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
               <>
                 <li>
                   <Link
-                    onClick={() => closeOnCurrent("/sign-up")}
+                    onClick={() => closeOnCurrent("/auth/sign-up")}
                     className="flex items-center w-full font-semibold text-green-600"
-                    href="/sign-up"
+                    href="/auth/sign-up"
                   >
                     Get started
                     <ArrowRightIcon className="ml-2 h-5 w-5" />
@@ -47,9 +47,9 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                 <li className="my-3 h-px w-full bg-gray-300" />
                 <li>
                   <Link
-                    onClick={() => closeOnCurrent("/sign-in")}
+                    onClick={() => closeOnCurrent("/auth/login")}
                     className="flex items-center w-full font-semibold"
-                    href="/sign-in"
+                    href="/auth/login"
                   >
                     Sign in
                   </Link>

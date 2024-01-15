@@ -6,7 +6,7 @@ const FEATURED = [
   {
     name: "Sedan Car",
     description: "Comfortable and fuel-efficient.",
-    src: "/sedan.png",
+    src: "/car.png",
     alt: "A modern, sleek sedan on a simple, plain background, portrayed in an ultra-realistic style. The sedan should display sophistication and comfort, with a focus on its elegant design and luxury features. The image should be dynamic and appealing, with the sedan as the sole focus, suitable for a high-end vehicle rental platform.",
   },
   {

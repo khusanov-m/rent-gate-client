@@ -10,7 +10,7 @@ const SignUpCTA = () => {
           Sign up now and explore our vast selection of vehicles.
         </p>
         <div className="mt-6 space-x-3">
-          <Link className={buttonVariants()} href={"sign-up"}>
+          <Link className={buttonVariants()} href={"/auth/sign-up"}>
             Sign Up
           </Link>
         </div>

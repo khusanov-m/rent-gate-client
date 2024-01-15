@@ -16,6 +16,7 @@ import * as React from "react";
 import SortBy from "../SortBy";
 import { Button } from "../ui/button";
 import VehicleDetails from "./VehicleDetails";
+import { DEMOVEHICLES } from "./vehicle.const";
 
 const sortByOptions = [
   {
@@ -36,89 +37,7 @@ const sortByOptions = [
   },
 ];
 
-const demovehicles = [
-  {
-    id: "ford_mustang_convertible",
-    name: "Ford Mustang Convertible",
-    description: "Sporty and stylish",
-    type: "car",
-    subType: "Sedan",
-    pricePerDay: 99,
-    pricePerHour: 20,
-    currency: "USD",
-    availability: "Available",
-    imageUrl: "url_to_ford_mustang_image",
-  },
-  {
-    id: "toyota_sienna_minivan",
-    name: "Toyota Sienna Minivan",
-    description: "Spacious and comfortable",
-    type: "car",
-    subType: "Van",
-    pricePerDay: 79,
-    pricePerHour: 15,
-    currency: "USD",
-    availability: "Unavailable",
-    imageUrl: "url_to_toyota_sienna_image",
-  },
-  {
-    id: "chevrolet_silverado_truck",
-    name: "Chevrolet Silverado Truck",
-    description: "Powerful and rugged",
-    type: "motorbike",
-    subType: "Truck",
-    pricePerDay: 89,
-    pricePerHour: 17,
-    currency: "USD",
-    availability: "Available",
-    imageUrl: "url_to_chevrolet_silverado_image",
-  },
-  {
-    id: "ford_mustang_convertible2",
-    name: "Ford Mustang Convertible",
-    description: "Sporty and stylish",
-    type: "car",
-    subType: "Sedan",
-    pricePerDay: 99,
-    pricePerHour: 20,
-    currency: "USD",
-    availability: "Available",
-    imageUrl: "url_to_ford_mustang_image",
-  },
-  {
-    id: "toyota_sienna_minivan2",
-    name: "Toyota Sienna Minivan",
-    description: "Spacious and comfortable",
-    type: "car",
-    subType: "Coupe",
-    pricePerDay: 79,
-    pricePerHour: 15,
-    currency: "USD",
-    availability: "Unavailable",
-    imageUrl: "url_to_toyota_sienna_image",
-  },
-  {
-    id: "boat_lambo",
-    name: "Lamborghini Aventador",
-    description: "Powerful and rugged",
-    type: "boat",
-    subType: "SUV",
-    pricePerDay: 89,
-    pricePerHour: 17,
-    currency: "USD",
-    availability: "Available",
-    imageUrl: "url_to_chevrolet_silverado_image",
-  },
-];
-
 const Vehicles = () => {
-  const [numberFormatter] = React.useState(() => {
-    return new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  });
-
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -136,7 +55,7 @@ const Vehicles = () => {
   );
 
   const vehicles = React.useMemo(() => {
-    return demovehicles.filter((vehicle) => {
+    return DEMOVEHICLES.filter((vehicle) => {
       const filterResuts = [];
 
       if (vehicleType) {
@@ -145,13 +64,13 @@ const Vehicles = () => {
 
       if (priceMin && priceMax) {
         filterResuts.push(
-          vehicle.pricePerDay >= Number(priceMin) &&
-            vehicle.pricePerDay <= Number(priceMax)
+          vehicle.price_per_day >= Number(priceMin) &&
+            vehicle.price_per_day <= Number(priceMax)
         );
       } else if (priceMin) {
-        filterResuts.push(vehicle.pricePerDay >= Number(priceMin));
+        filterResuts.push(vehicle.price_per_day >= Number(priceMin));
       } else if (priceMax) {
-        filterResuts.push(vehicle.pricePerDay <= Number(priceMax));
+        filterResuts.push(vehicle.price_per_day <= Number(priceMax));
       }
 
       if (filterResuts.length === 0) return true;
@@ -252,8 +171,8 @@ const Vehicles = () => {
             <div className="flex space-x-4">
               <span className="text-sm text-gray-500">
                 {vehicles.length > 0
-                  ? `Showing 1-${vehicles.length} of ${demovehicles.length} results`
-                  : `Showing 0 results of ${demovehicles.length} results`}
+                  ? `Showing 1-${vehicles.length} of ${DEMOVEHICLES.length} results`
+                  : `Showing 0 results of ${DEMOVEHICLES.length} results`}
               </span>
             </div>
 
@@ -273,11 +192,7 @@ const Vehicles = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {vehicles.map((vehicle) => (
-              <VehicleDetails
-                key={vehicle.id}
-                vehicle={vehicle}
-                numberFormatter={numberFormatter}
-              />
+              <VehicleDetails key={vehicle.id} vehicle={vehicle} />
             ))}
           </div>
         </main>

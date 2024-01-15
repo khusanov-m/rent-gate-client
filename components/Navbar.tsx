@@ -5,7 +5,7 @@ import UserAccountNav from "./UserAccountNav";
 import { buttonVariants } from "./ui/button";
 
 const Navbar = () => {
-  const user = "null";
+  const user = null;
 
   return (
     <nav className="px-5 sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
@@ -21,7 +21,7 @@ const Navbar = () => {
             {!user ? (
               <>
                 <Link
-                  href={"login"}
+                  href={"/auth/login"}
                   className={buttonVariants({
                     variant: "ghost",
                     size: "sm",
@@ -30,7 +30,7 @@ const Navbar = () => {
                   Sign in
                 </Link>
                 <Link
-                  href={"/sign-up"}
+                  href={"/auth/sign-up"}
                   className={buttonVariants({
                     size: "sm",
                   })}

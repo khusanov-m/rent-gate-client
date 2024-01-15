@@ -13,7 +13,7 @@ const PerformanceSecurity = () => {
             <h2 className="lg:leading-tighter text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
               Traffic spikes should be exciting, not scary.
             </h2>
-            <Link className={buttonVariants()} href={"sign-up"}>
+            <Link className={buttonVariants()} href={"/auth/sign-up"}>
               Get Started
             </Link>
           </div>
