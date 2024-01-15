@@ -10,61 +10,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import { LineHeightIcon } from "@radix-ui/react-icons";
-import { useSearchParams } from "next/navigation";
+import { DashIcon, LineHeightIcon } from "@radix-ui/react-icons";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
+import SortBy from "../SortBy";
 import { Button } from "../ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import VehicleDetails from "./VehicleDetails";
 
-const vehicleTypes = [
+const sortByOptions = [
   {
-    type: "Motorbikes",
-    list: [
-      "Scooter",
-      "Moped",
-      "Cruiser",
-      "Sport",
-      "Touring",
-      "Dual Sport",
-      "Dirt Bike",
-      "Trials",
-      "Off-Road",
-    ],
+    key: "featured",
+    value: "Featured",
   },
   {
-    type: "Cars",
-    list: [
-      "Sedan",
-      "SUV",
-      "Truck",
-      "Van",
-      "Convertible",
-      "Coupe",
-      "Wagon",
-      "Sports",
-      "Off-road",
-    ],
+    key: "newest",
+    value: "Newest",
+  },
+  {
+    key: "low",
+    value: "Price: Low to High",
+  },
+  {
+    key: "high",
+    value: "Price: High to Low",
   },
 ];
-
-const priceRanges = ["<< $50", ">> $50", ">> $100", ">> $150", ">> $200"];
-
-const availability = ["Available", "Unavailable"];
 
 const demovehicles = [
   {
     id: "ford_mustang_convertible",
     name: "Ford Mustang Convertible",
     description: "Sporty and stylish",
-    type: "Sedan",
+    type: "car",
+    subType: "Sedan",
     pricePerDay: 99,
     pricePerHour: 20,
     currency: "USD",
@@ -75,7 +53,8 @@ const demovehicles = [
     id: "toyota_sienna_minivan",
     name: "Toyota Sienna Minivan",
     description: "Spacious and comfortable",
-    type: "Van",
+    type: "car",
+    subType: "Van",
     pricePerDay: 79,
     pricePerHour: 15,
     currency: "USD",
@@ -86,7 +65,8 @@ const demovehicles = [
     id: "chevrolet_silverado_truck",
     name: "Chevrolet Silverado Truck",
     description: "Powerful and rugged",
-    type: "Truck",
+    type: "motorbike",
+    subType: "Truck",
     pricePerDay: 89,
     pricePerHour: 17,
     currency: "USD",
@@ -97,7 +77,8 @@ const demovehicles = [
     id: "ford_mustang_convertible2",
     name: "Ford Mustang Convertible",
     description: "Sporty and stylish",
-    type: "Sedan",
+    type: "car",
+    subType: "Sedan",
     pricePerDay: 99,
     pricePerHour: 20,
     currency: "USD",
@@ -108,7 +89,8 @@ const demovehicles = [
     id: "toyota_sienna_minivan2",
     name: "Toyota Sienna Minivan",
     description: "Spacious and comfortable",
-    type: "Coupe",
+    type: "car",
+    subType: "Coupe",
     pricePerDay: 79,
     pricePerHour: 15,
     currency: "USD",
@@ -116,10 +98,11 @@ const demovehicles = [
     imageUrl: "url_to_toyota_sienna_image",
   },
   {
-    id: "chevrolet_silverado_truck2",
-    name: "Chevrolet Silverado Truck",
+    id: "boat_lambo",
+    name: "Lamborghini Aventador",
     description: "Powerful and rugged",
-    type: "SUV",
+    type: "boat",
+    subType: "SUV",
     pricePerDay: 89,
     pricePerHour: 17,
     currency: "USD",
@@ -129,11 +112,6 @@ const demovehicles = [
 ];
 
 const Vehicles = () => {
-  const searchParams = useSearchParams();
-  const type = searchParams.get("type");
-  const vehicleTypeParam =
-    vehicleTypes.find((v) => v.type === type)?.list || [];
-
   const [numberFormatter] = React.useState(() => {
     return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
@@ -141,141 +119,77 @@ const Vehicles = () => {
     });
   });
 
-  const [vehicleTypeFilter, setVehicleTypeFilter] =
-    React.useState<string[]>(vehicleTypeParam);
-  const vehicleTypeFilterParam = vehicleTypeFilter.join(", ");
-  const [priceRangeFilter, setPriceRangeFilter] = React.useState<string[]>([]);
-  const [availabilityFilter, setAvailabilityFilter] =
-    React.useState<string>("");
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const [sortBy, setSortBy] = React.useState<string>("");
+
+  const [vehicleType, setVehicleType] = React.useState<string>(
+    () => searchParams.get("type") ?? ""
+  );
+  const [priceMin, setPriceMin] = React.useState<string>(
+    () => searchParams.get("priceMin") ?? ""
+  );
+  const [priceMax, setPriceMax] = React.useState<string>(
+    () => searchParams.get("priceMax") ?? ""
+  );
 
   const vehicles = React.useMemo(() => {
     return demovehicles.filter((vehicle) => {
       const filterResuts = [];
-      if (vehicleTypeFilter.length > 0) {
-        filterResuts.push(vehicleTypeFilter.includes(vehicle.type));
+
+      if (vehicleType) {
+        filterResuts.push(vehicleType === vehicle.type);
       }
-      if (priceRangeFilter.length > 0) {
+
+      if (priceMin && priceMax) {
         filterResuts.push(
-          priceRangeFilter.includes(vehicle.pricePerDay.toString())
+          vehicle.pricePerDay >= Number(priceMin) &&
+            vehicle.pricePerDay <= Number(priceMax)
         );
-      }
-      if (availabilityFilter) {
-        filterResuts.push(vehicle.availability === availabilityFilter);
+      } else if (priceMin) {
+        filterResuts.push(vehicle.pricePerDay >= Number(priceMin));
+      } else if (priceMax) {
+        filterResuts.push(vehicle.pricePerDay <= Number(priceMax));
       }
 
       if (filterResuts.length === 0) return true;
       return filterResuts.every((result) => result);
     });
-  }, [vehicleTypeFilter, priceRangeFilter, availabilityFilter]);
+  }, [vehicleType, priceMin, priceMax]);
+
+  const onReset = () => {
+    setVehicleType("");
+    setPriceMin("");
+    setPriceMax("");
+  };
+
+  const handlePriceChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setPrice: (val: string) => void
+  ) => {
+    const value = event.target.value;
+    if (value === "" || /^\d+$/.test(value)) {
+      setPrice(value);
+    }
+  };
+
+  React.useEffect(() => {
+    const params = new URLSearchParams();
+    if (vehicleType) {
+      params.set("type", vehicleType);
+    }
+    if (priceMin) {
+      params.set("priceMin", priceMin.toString());
+    }
+    if (priceMax) {
+      params.set("priceMax", priceMax.toString());
+    }
+    router.replace(`${pathname}?${params.toString()}`, {});
+  }, [pathname, router, vehicleType, priceMin, priceMax]);
 
   return (
-    // <section className="container pt-6 px-4 md:px-6 grid gap-10 items-start">
-    //   <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
-    //     <div className="text-sm font-semibold pl-4 sm:pl-0">Filter: </div>
-    //     <DropdownMenu>
-    //       <DropdownMenuTrigger asChild>
-    //         <Button variant="link">
-    //           Vehicle Type: {vehicleTypeFilterParam}
-    //           <PlusIcon className="w-4 h-4 ml-2" />
-    //         </Button>
-    //       </DropdownMenuTrigger>
-    //       <DropdownMenuContent align="start">
-    //         <ScrollArea className="h-80 w-48">
-    //           {vehicleTypes.map((vehicle) => (
-    //             <div key={vehicle.type}>
-    //               <DropdownMenuLabel
-    //                 onClick={() => {
-    //                   setVehicleTypeFilter(vehicle.list);
-    //                 }}
-    //               >
-    //                 {vehicle.type}
-    //               </DropdownMenuLabel>
-    //               <DropdownMenuSeparator />
-    //               {vehicle.list.map((item) => (
-    //                 <DropdownMenuCheckboxItem
-    //                   key={item}
-    //                   checked={vehicleTypeFilter?.includes(item)}
-    //                   onCheckedChange={(checked) => {
-    //                     return checked
-    //                       ? setVehicleTypeFilter((val) => [...val, item])
-    //                       : setVehicleTypeFilter((val) =>
-    //                           val?.filter((value) => value !== item)
-    //                         );
-    //                   }}
-    //                 >
-    //                   {item}
-    //                 </DropdownMenuCheckboxItem>
-    //               ))}
-    //             </div>
-    //           ))}
-    //         </ScrollArea>
-    //       </DropdownMenuContent>
-    //     </DropdownMenu>
-    //     <DropdownMenu>
-    //       <DropdownMenuTrigger asChild>
-    //         <Button variant="link">
-    //           Price Range
-    //           <PlusIcon className="w-4 h-4 ml-2" />
-    //         </Button>
-    //       </DropdownMenuTrigger>
-    //       <DropdownMenuContent align="start">
-    //         {priceRanges.map((item) => (
-    //           <DropdownMenuCheckboxItem
-    //             key={item}
-    //             checked={priceRangeFilter?.includes(item)}
-    //             onCheckedChange={(checked) => {
-    //               return checked
-    //                 ? setPriceRangeFilter((val) => [...val, item])
-    //                 : setPriceRangeFilter((val) =>
-    //                     val?.filter((value) => value !== item)
-    //                   );
-    //             }}
-    //           >
-    //             {item}
-    //           </DropdownMenuCheckboxItem>
-    //         ))}
-    //       </DropdownMenuContent>
-    //     </DropdownMenu>
-    //     <DropdownMenu>
-    //       <DropdownMenuTrigger asChild>
-    //         <Button variant="link">
-    //           Availability
-    //           <PlusIcon className="w-4 h-4 ml-2" />
-    //         </Button>
-    //       </DropdownMenuTrigger>
-    //       <DropdownMenuContent align="start">
-    //         <DropdownMenuRadioGroup
-    //           value={availabilityFilter}
-    //           onValueChange={(val) => {
-    //             if (availabilityFilter === val) {
-    //               setAvailabilityFilter("");
-    //             } else {
-    //               setAvailabilityFilter(val);
-    //             }
-    //           }}
-    //         >
-    //           {availability.map((item) => (
-    //             <DropdownMenuRadioItem key={item} value={item}>
-    //               {item}
-    //             </DropdownMenuRadioItem>
-    //           ))}
-    //         </DropdownMenuRadioGroup>
-    //       </DropdownMenuContent>
-    //     </DropdownMenu>
-    //   </div>
-
-    //   <div className="grid gap-6 md:gap-8">
-    //     <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
-    //       {vehicles.map((vehicle) => (
-    //         <VehicleDetails
-    //           key={vehicle.id}
-    //           vehicle={vehicle}
-    //           numberFormatter={numberFormatter}
-    //         />
-    //       ))}
-    //     </div>
-    //   </div>
-    // </section>
     <div className="container mx-auto px-4 md:px-6 py-8">
       <header className="mb-6">
         <h1 className="text-3xl font-bold">Find Your Perfect Ride</h1>
@@ -292,29 +206,42 @@ const Vehicles = () => {
             <CardContent>
               <div className="space-y-4">
                 <div>
+                  <Label htmlFor="location">Location</Label>
+                  <Input id="location" placeholder="Enter a location" />
+                </div>
+                <div>
                   <Label htmlFor="price-range">Price Range</Label>
-                  <Slider id="price-range" max={500} min={0} step={10} />
+
+                  <div className="flex items-center justify-between gap-2">
+                    <Input
+                      id="price-range"
+                      placeholder="0"
+                      value={priceMin}
+                      onChange={(e) => handlePriceChange(e, setPriceMin)}
+                    />
+                    <DashIcon className="w-4 h-4" />
+                    <Input
+                      placeholder="100"
+                      value={priceMax}
+                      onChange={(e) => handlePriceChange(e, setPriceMax)}
+                    />
+                  </div>
                 </div>
                 <div>
                   <Label htmlFor="vehicle-type">Vehicle Type</Label>
-                  <Select>
+                  <Select value={vehicleType} onValueChange={setVehicleType}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a type" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="car">Car</SelectItem>
-                      <SelectItem value="motorcycle">Motorcycle</SelectItem>
+                      <SelectItem value="motorbike">Motorbike</SelectItem>
                       <SelectItem value="rv">RV</SelectItem>
                       <SelectItem value="boat">Boat</SelectItem>
+                      <SelectItem value="truck">Truck</SelectItem>
+                      <SelectItem value="bus">Bus</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
-                <div>
-                  <Label htmlFor="location">Location</Label>
-                  <Input id="location" placeholder="Enter a location" />
-                </div>
-                <div>
-                  <Label htmlFor="availability">Availability</Label>
                 </div>
               </div>
             </CardContent>
@@ -324,36 +251,24 @@ const Vehicles = () => {
           <div className="flex items-center justify-between">
             <div className="flex space-x-4">
               <span className="text-sm text-gray-500">
-                Showing 1-10 of 100 results
+                {vehicles.length > 0
+                  ? `Showing 1-${vehicles.length} of ${demovehicles.length} results`
+                  : `Showing 0 results of ${demovehicles.length} results`}
               </span>
             </div>
 
             <div className="flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button className="sm:ml-auto shrink-0" variant="outline">
-                    <LineHeightIcon className="w-4 h-4 mr-2" />
-                    Sort by
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-[200px]">
-                  <DropdownMenuRadioGroup value="featured">
-                    <DropdownMenuRadioItem value="featured">
-                      Featured
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="Newest">
-                      Newest
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="low">
-                      Price: Low to High
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="high">
-                      Price: High to Low
-                    </DropdownMenuRadioItem>
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button variant="outline">Reset</Button>
+              <SortBy
+                icon={<LineHeightIcon className="w-4 h-4 mr-2" />}
+                options={sortByOptions}
+                placeholder="Sort by"
+                setValue={setSortBy}
+                value={sortBy}
+              />
+
+              <Button variant="outline" onClick={onReset}>
+                Reset
+              </Button>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -10,13 +10,13 @@ import { Input } from "../ui/input";
 const SearchVehicle = () => {
   const [startDate, setStartDate] = React.useState<Date>();
   const [endDate, setEndDate] = React.useState<Date>();
-  const [pickup, setPickup] = React.useState<string>("");
+  const [location, setLocation] = React.useState<string>("");
 
   const router = useRouter();
 
   const onSubmit = () => {
     const params = new URLSearchParams();
-    if (pickup) params.set("pickup", pickup);
+    if (location) params.set("location", location);
     if (startDate) params.set("startDate", startDate.toISOString());
     if (endDate) params.set("endDate", endDate.toISOString());
     router.push(`/vehicles?${params.toString()}`);
@@ -25,10 +25,10 @@ const SearchVehicle = () => {
   return (
     <div className="mt-6 grid gap-4 md:grid-cols-2 w-full">
       <Input
-        placeholder="pick-up "
+        placeholder="Location"
         className={cn(buttonVariants({ variant: "outline" }), "md:col-span-2")}
-        value={pickup}
-        onChange={(e) => setPickup(e.target.value)}
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
       />
       <DatePickerWithPresets
         className="w-full"
