@@ -12,7 +12,7 @@ export function absoluteUrl(path: string) {
   return `http://localhost:${process.env.PORT ?? 3000}${path}`;
 }
 
-export function constructMetadata({
+export function makeMetaData({
   title = "Rent Gate",
   description = "Rent the perfect vehicle for your needs.",
   image = "/thumbnail.png",

@@ -1,5 +1,9 @@
-import Vehicles from "@/components/vehicle/Vehicles";
+import VehiclesFeed from "@/components/vehicle/Vehicles";
 
-export default function Page() {
-  return <Vehicles />;
+export default function Vehicles() {
+  return (
+    <>
+      <VehiclesFeed />
+    </>
+  );
 }

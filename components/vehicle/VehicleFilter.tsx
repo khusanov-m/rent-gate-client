@@ -9,23 +9,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Switch } from "../ui/switch";
 
 const VehicleFilter = ({
   priceMin,
   priceMax,
   vehicleType,
+  available,
   setPriceMin,
   setPriceMax,
   setVehicleType,
   handlePriceChange,
+  setAvailable,
 }: {
-  priceMin: number;
-  priceMax: number;
+  priceMin: string;
+  priceMax: string;
   vehicleType: string;
-  setPriceMin: (value: number) => void;
-  setPriceMax: (value: number) => void;
+  available: boolean;
+  setPriceMin: (value: string) => void;
+  setPriceMax: (value: string) => void;
   setVehicleType: (value: string) => void;
   handlePriceChange: (e: React.ChangeEvent<HTMLInputElement>, cb: any) => void;
+  setAvailable: (value: boolean) => void;
 }) => {
   return (
     <Card>
@@ -64,13 +69,21 @@ const VehicleFilter = ({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="car">Car</SelectItem>
-                <SelectItem value="motorbike">Motorbike</SelectItem>
+                <SelectItem value="bike">Motorbike</SelectItem>
                 <SelectItem value="rv">RV</SelectItem>
                 <SelectItem value="boat">Boat</SelectItem>
                 <SelectItem value="truck">Truck</SelectItem>
                 <SelectItem value="bus">Bus</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="available"
+              checked={available}
+              onCheckedChange={setAvailable}
+            />
+            <Label htmlFor="available">Available</Label>
           </div>
         </div>
       </CardContent>

@@ -1,7 +1,7 @@
 "use client";
 
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PopoverTrigger } from "@radix-ui/react-popover";
+import Link from "next/link";
 import * as React from "react";
 import { DateRange } from "react-day-picker";
 import {
@@ -24,7 +25,7 @@ import {
 import { Checkbox } from "../ui/checkbox";
 import { Popover, PopoverContent } from "../ui/popover";
 
-const RentForm = () => {
+const RentForm = ({ id }: { id: string }) => {
   const [date, setDate] = React.useState<DateRange | undefined>();
 
   return (
@@ -87,16 +88,6 @@ const RentForm = () => {
               </div>
             </PopoverContent>
           </Popover>
-          {/* <Select>
-            <SelectTrigger id="additional-services">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="gps">GPS Navigation +10$</SelectItem>
-              <SelectItem value="child-seat">Child Seat +2$</SelectItem>
-              <SelectItem value="bike-rack">Bike Rack +5$</SelectItem>
-            </SelectContent>
-          </Select> */}
         </div>
         <div className="space-y-2">
           <Label htmlFor="coverage">Coverage</Label>
@@ -112,9 +103,12 @@ const RentForm = () => {
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full" type="submit">
+        <Link
+          href={`/vehicles/${id}/payment`}
+          className={buttonVariants({ className: "ml-auto" })}
+        >
           Book Now
-        </Button>
+        </Link>
       </CardFooter>
     </Card>
   );

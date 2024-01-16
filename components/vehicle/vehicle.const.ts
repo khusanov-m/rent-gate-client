@@ -10,6 +10,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Unavailable",
     color: "Yellow",
+    driver_option: "with_driver",
   },
   {
     id: "toyota_speedboat",
@@ -22,6 +23,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Unavailable",
     color: "Blue",
+    driver_option: "both",
   },
   {
     id: "ford_touring",
@@ -34,6 +36,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Available",
     color: "Purple",
+    driver_option: "without_driver",
   },
   {
     id: "bmw_sailboat",
@@ -46,6 +49,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Unavailable",
     color: "Red",
+    driver_option: "with_driver",
   },
   {
     id: "audi_speedboat",
@@ -58,6 +62,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Unavailable",
     color: "Yellow",
+    driver_option: "with_driver",
   },
   {
     id: "porsche_sedan",
@@ -70,6 +75,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Unavailable",
     color: "Red",
+    driver_option: "without_driver",
   },
   {
     id: "mercedes_convertible",
@@ -82,6 +88,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Unavailable",
     color: "Orange",
+    driver_option: "with_driver",
   },
   {
     id: "audi_cabin_cruiser",
@@ -94,6 +101,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Available",
     color: "Silver",
+    driver_option: "with_driver",
   },
   {
     id: "lamborghini_hatchback",
@@ -106,6 +114,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Unavailable",
     color: "Green",
+    driver_option: "with_driver",
   },
   {
     id: "toyota_sport",
@@ -118,6 +127,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Unavailable",
     color: "Blue",
+    driver_option: "without_driver",
   },
   {
     id: "audi_fishing",
@@ -130,6 +140,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Unavailable",
     color: "Red",
+    driver_option: "with_driver",
   },
   {
     id: "porsche_standard",
@@ -142,6 +153,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Unavailable",
     color: "Blue",
+    driver_option: "both",
   },
   {
     id: "lamborghini_cruiser",
@@ -154,6 +166,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Available",
     color: "Purple",
+    driver_option: "with_driver",
   },
   {
     id: "tesla_speedboat",
@@ -166,6 +179,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Available",
     color: "Gray",
+    driver_option: "with_driver",
   },
   {
     id: "tesla_sailboat",
@@ -178,6 +192,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Available",
     color: "Red",
+    driver_option: "both",
   },
   {
     id: "chevrolet_standard",
@@ -190,6 +205,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Available",
     color: "Blue",
+    driver_option: "with_driver",
   },
   {
     id: "audi_sailboat",
@@ -202,6 +218,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Available",
     color: "White",
+    driver_option: "with_driver",
   },
   {
     id: "porsche_touring",
@@ -214,6 +231,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Unavailable",
     color: "Blue",
+    driver_option: "with_driver",
   },
   {
     id: "honda_cabin_cruiser",
@@ -226,6 +244,7 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Available",
     color: "Green",
+    driver_option: "with_driver",
   },
   {
     id: "tesla_sport2",
@@ -238,5 +257,6 @@ export const DEMOVEHICLES = [
     currency: "USD",
     availability: "Available",
     color: "Black",
+    driver_option: "without_driver",
   },
 ];
