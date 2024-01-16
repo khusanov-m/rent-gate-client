@@ -3,8 +3,8 @@ import Providers from "@/components/Providers";
 import { Toaster } from "@/components/ui/toaster";
 import { cn, makeMetaData } from "@/lib/utils";
 import { Inter } from "next/font/google";
+import { Toaster as SoonerToaster } from "sonner";
 import "./globals.css";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = makeMetaData();
@@ -23,6 +23,7 @@ export default function RootLayout({
           <Toaster />
           <Navbar />
           {children}
+          <SoonerToaster />
         </body>
       </Providers>
     </html>
