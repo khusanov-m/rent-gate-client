@@ -13,7 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 {
   /* REMOVE FROM */
 }
-export async function getPing() {
+async function getPing() {
   const d = await fetch("http://144.91.121.27:8000/api/v1/ping", {
     method: "GET",
   });
