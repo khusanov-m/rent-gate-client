@@ -13,9 +13,9 @@ const VehicleCategory = ({
   return (
     <Card>
       <Link href={category.path}>
-        <CardContent className="flex items-center gap-4 pt-6">
+        <CardContent className="flex items-center justify-center md:justify-start gap-4 p-2 md:p-6">
           {category.icon}
-          <span>{category.name}</span>
+          <span className="hidden md:block">{category.name}</span>
         </CardContent>
       </Link>
     </Card>

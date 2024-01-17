@@ -24,8 +24,8 @@ const OFFERS = [
   {
     title: "Get a Private Driver",
     description: "Enjoy the luxury of a private driver for your travels.",
-    src: "/placeholder.svg",
-    alt: "Get a Private Driver",
+    src: "/rent.png",
+    alt: "A modern car rental service scene. A customer is standing at a counter where a friendly staff member is handing over car keys. In the background, through a large window, a variety of cars are visible, including sedans and SUVs. The interior is sleek and professional, with promotional posters for car rentals on the walls and a digital display showing car options and prices. The atmosphere is welcoming and efficient.",
   },
 ];
 
