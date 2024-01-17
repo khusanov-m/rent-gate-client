@@ -33,7 +33,7 @@ const VehicleFilter = ({
   setAvailable: (value: boolean) => void;
 }) => {
   return (
-    <Card>
+    <Card className="sticky top-[78px]">
       <CardHeader>
         <CardTitle>Filter Vehicles</CardTitle>
       </CardHeader>
