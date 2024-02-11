@@ -1,14 +1,63 @@
-import { getUserAPI } from "@/server/auth";
+"use client";
+
+import { UserDetails } from "@/server/auth";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import React from "react";
 import MobileNav from "./MobileNav";
 import UserAccountNav from "./UserAccountNav";
 import { buttonVariants } from "./ui/button";
 
-export default async function Navbar() {
-  const d = getUserAPI();
+export default function Navbar() {
+  // React.useEffect(() => {
+  //   fetch("http://localhost:8000/api/v1/users/me", {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization:
+  //         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgyOTIxNDIsImlhdCI6MTcwNzY4NzM0MiwibmJmIjoxNzA3Njg3MzQyLCJzdWIiOjF9.oSw0vY541QkPYLn-uvXx7azLlqsYrRLPRR2OhczWBv0",
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data.data.user);
+  //       setUser(data.data.user);
+  //     });
+  // }, []);
 
-  const user = null;
+  // const {
+  //   data: user,
+  //   isPending,
+  //   error,
+  // } = useQuery({
+  //   queryKey: ["user"],
+  //   queryFn: () =>
+  //     fetch("http://localhost:8000/api/v1/users/me", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization:
+  //           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgyOTIxNDIsImlhdCI6MTcwNzY4NzM0MiwibmJmIjoxNzA3Njg3MzQyLCJzdWIiOjF9.oSw0vY541QkPYLn-uvXx7azLlqsYrRLPRR2OhczWBv0",
+  //       },
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => data.data.user),
+  // });
+
+  React.useEffect(() => {
+    fetch("http://localhost:8000/api/v1/users/me", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgyOTIxNDIsImlhdCI6MTcwNzY4NzM0MiwibmJmIjoxNzA3Njg3MzQyLCJzdWIiOjF9.oSw0vY541QkPYLn-uvXx7azLlqsYrRLPRR2OhczWBv0",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data.data.user);
+        return data.data.user;
+      });
+  }, []);
+  const [user, setUser] = React.useState<UserDetails | null>(null);
 
   return (
     <nav className="px-5 sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
@@ -72,9 +121,9 @@ export default async function Navbar() {
                   // }
                   // email={user.email ?? ""}
                   // imageUrl={user.photo_url ?? ""}
-                  name={"Your Account"}
-                  email={""}
-                  imageUrl={""}
+                  name={user.name ?? ""}
+                  email={user.email ?? ""}
+                  imageUrl={user.photo ?? ""}
                 />
               </>
             )}
