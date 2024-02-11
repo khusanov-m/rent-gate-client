@@ -3,16 +3,16 @@
 import { ArrowRightIcon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import * as React from "react";
 
 const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
-  const [isOpen, setOpen] = useState<boolean>(false);
+  const [isOpen, setOpen] = React.useState(false);
 
   const toggleOpen = () => setOpen((prev) => !prev);
 
   const pathname = usePathname();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isOpen) toggleOpen();
   }, [pathname]);
 

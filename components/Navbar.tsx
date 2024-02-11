@@ -1,10 +1,13 @@
+import { getUserAPI } from "@/server/auth";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import MobileNav from "./MobileNav";
 import UserAccountNav from "./UserAccountNav";
 import { buttonVariants } from "./ui/button";
 
-const Navbar = () => {
+export default async function Navbar() {
+  const d = getUserAPI();
+
   const user = null;
 
   return (
@@ -80,6 +83,4 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}

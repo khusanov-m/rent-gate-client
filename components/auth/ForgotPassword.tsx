@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
@@ -13,15 +12,31 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useToast } from "@/components/ui/use-toast";
+import { validateEmail } from "@/lib/regex";
 import { useRouter } from "next/navigation";
+import * as React from "react";
 
 const ForgotPassword = () => {
   const router = useRouter();
-  const onSubmit = () => {
-    console.log("submit");
+  const { toast } = useToast();
+  const [email, setEmail] = React.useState("");
+  const [name, setName] = React.useState("");
 
-    router.push("/auth/reset-password");
-  };
+  function onSubmit() {
+    if (!validateEmail(email) && !name) {
+      toast({
+        variant: "destructive",
+        title: "Invalid credentials.",
+        description: "Make sure to enter correct email and user's name.",
+      });
+      return;
+    }
+
+    console.log(email, name);
+    // router.push("/auth/reset-password");
+  }
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -49,6 +64,11 @@ const ForgotPassword = () => {
               id="name"
               placeholder="Pedro Duarte"
               className="col-span-3"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              minLength={8}
+              maxLength={50}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -57,17 +77,21 @@ const ForgotPassword = () => {
             </Label>
             <Input
               id="email"
+              type="email"
               placeholder="m@example.com"
               className="col-span-3"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              maxLength={50}
             />
           </div>
         </div>
+
         <SheetFooter>
-          <SheetClose asChild>
-            <Button type="submit" onClick={onSubmit}>
-              Submit
-            </Button>
-          </SheetClose>
+          <Button type="button" onClick={onSubmit}>
+            Submit
+          </Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>

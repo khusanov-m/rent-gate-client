@@ -1,7 +1,13 @@
 import axios from "axios";
 
+// "https://rent-gate-api.onrender.com/api/v1"
+// "http://localhost:8000"
+
+const BASE =
+  "http://localhost:8000/api/v1" || "https://rent-gate-api.onrender.com/api/v1";
+
 const axiosInstance = axios.create({
-  baseURL: "https://rent-gate-api.onrender.com/api/v1",
+  baseURL: BASE,
   headers: {
     "Content-Type": "application/json",
   },
@@ -9,13 +15,14 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Modify the request config here (add headers, authentication tokens)
-    // const accessToken = localStorage.getItem("token");
+    if (typeof window !== "undefined") {
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgyOTIxNDIsImlhdCI6MTcwNzY4NzM0MiwibmJmIjoxNzA3Njg3MzQyLCJzdWIiOjF9.oSw0vY541QkPYLn-uvXx7azLlqsYrRLPRR2OhczWBv0"; // window.localStorage.getItem("token");
+      console.log(token, "token");
 
-    // // If token is present add it to request's Authorization Header
-    // if (accessToken) {
-    //   if (config.headers) config.headers.token = accessToken;
-    // }
+      if (token) config.headers["Authorization"] = `Bearer ${token}`;
+    }
+
     return config;
   },
   (error) => {
@@ -39,5 +46,9 @@ axiosInstance.interceptors.response.use(
   }
 );
 // End of Response interceptor
+
+export const setAxiosToken = (token: string) => {
+  axiosInstance.defaults.headers.common["Authorization"] = token;
+};
 
 export default axiosInstance;
