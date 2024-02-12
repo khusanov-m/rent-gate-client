@@ -22,7 +22,7 @@ export default async function RootLayout({
       >
         <Providers>
           <Toaster />
-          <Navbar />
+          <Navbar  />
           {children}
           <SoonerToaster />
         </Providers>

@@ -16,10 +16,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     if (typeof window !== "undefined") {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgyOTIxNDIsImlhdCI6MTcwNzY4NzM0MiwibmJmIjoxNzA3Njg3MzQyLCJzdWIiOjF9.oSw0vY541QkPYLn-uvXx7azLlqsYrRLPRR2OhczWBv0"; // window.localStorage.getItem("token");
-      console.log(token, "token");
-
+      const token = window.localStorage.getItem("token");
       if (token) config.headers["Authorization"] = `Bearer ${token}`;
     }
 

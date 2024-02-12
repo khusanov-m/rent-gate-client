@@ -70,6 +70,5 @@ export type UserDetails = {
 };
 export const getUserAPI = async () => {
   const res = await axiosInstance.get<UserResponse>("/users/me");
-  if (res.data.status === "success") return res.data.data.user;
-  return res.data.data;
+  return res.data;
 };

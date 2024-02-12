@@ -17,11 +17,7 @@ interface UserAccountNavProps {
   imageUrl: string;
 }
 
-const UserAccountNav = async ({
-  email,
-  imageUrl,
-  name,
-}: UserAccountNavProps) => {
+const UserAccountNav = ({ email, imageUrl, name }: UserAccountNavProps) => {
   // load user subscription plan and check if user is subscribed or have active rental car
   // const subscriptionPlan = await getUserSubscriptionPlan();
   // const rentalCar = await getUserRentalCar();
