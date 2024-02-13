@@ -1,9 +1,7 @@
-"use client";
-
 import { LoginForm } from "@/components/auth/login-form";
 import Link from "next/link";
 
-export default function Page() {
+export default function LoginPage() {
   return (
     <>
       <div className="flex items-center justify-center py-12">

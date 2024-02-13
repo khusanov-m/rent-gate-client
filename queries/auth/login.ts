@@ -1,7 +1,8 @@
 import { loginAPI } from "@/server/auth";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const LoginAction = () => {
+  const queryClient = useQueryClient();
   const {
     mutate: handleLogin,
     data,
@@ -12,8 +13,11 @@ export const LoginAction = () => {
     mutationKey: ["login"],
     onSuccess(token) {
       localStorage.setItem("token", token || "");
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+        refetchType: "all",
+      });
     },
-    retry: 0,
   });
 
   return { handleLogin, data, isPending, error };

@@ -1,7 +1,7 @@
 "use client";
 
+import { LoginAction } from "@/queries/auth/login";
 import { loginSchema, loginSchemaType } from "@/schema/auth";
-import { LoginAction } from "@/server/actions/login";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -11,7 +11,6 @@ import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,7 +19,7 @@ import {
 import { Input } from "../ui/input";
 import { PasswordInput } from "../ui/password-input";
 import { useToast } from "../ui/use-toast";
-import ForgotPassword from "./ForgotPassword";
+import ForgotPassword from "./forgot-password-form";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -32,13 +31,14 @@ export const LoginForm = () => {
       password: "",
     },
   });
+
   const { handleLogin, isPending, data } = LoginAction();
   function onSubmit(values: loginSchemaType) {
     handleLogin(values, {
-      onSuccess(data, variables, context) {
+      onSuccess() {
         router.push("/");
       },
-      onError(error, variables, context) {
+      onError(error) {
         toast({
           variant: "destructive",
           title: "Invalid credentials.",
@@ -94,7 +94,6 @@ export const LoginForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription></FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -110,7 +109,11 @@ export const LoginForm = () => {
           )}
         </Button>
         <div className="relative">
-          <Button className="w-full" variant="outline" disabled>
+          <Button
+            className="w-full"
+            variant="outline"
+            disabled={isPending || true}
+          >
             Login with Google
           </Button>
           <Badge className="absolute -translate-y-1/2 right-2 top-1/2 text-center pointer-events-none">

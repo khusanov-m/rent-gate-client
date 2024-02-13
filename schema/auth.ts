@@ -66,9 +66,6 @@ export const registerSchema = z.object({
     .max(50, {
       message: "Password must be at most 50 characters long",
     }),
-  confirmPassword: z.string().refine((data) => data === "password", {
-    message: "Passwords do not match",
-  }),
 });
 export type registerSchemaType = z.infer<typeof registerSchema>;
 

@@ -1,12 +1,12 @@
 "use client";
 
-import { loginSchema, loginSchemaType } from "@/schema/auth";
-import { LoginAction } from "@/server/actions/login";
+import { RegisterAction } from "@/queries/auth/register";
+import { registerSchema, registerSchemaType } from "@/schema/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -20,30 +20,39 @@ import {
 import { Input } from "../ui/input";
 import { PasswordInput } from "../ui/password-input";
 import { useToast } from "../ui/use-toast";
-import ForgotPassword from "./ForgotPassword";
 
 export const RegisterForm = () => {
   const router = useRouter();
   const { toast } = useToast();
-  const form = useForm<loginSchemaType>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<registerSchemaType>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
       password: "",
+      firstName: "",
+      lastName: "",
     },
   });
-  const { handleLogin, isPending, data } = LoginAction();
-  function onSubmit(values: loginSchemaType) {
-    handleLogin(values, {
-      onSuccess(data, variables, context) {
-        router.push("/");
+
+  const { handleRegister, isPending, data } = RegisterAction();
+
+  function onSubmit(values: registerSchemaType) {
+    const payload = {
+      email: values.email,
+      name: values.firstName + " " + values.lastName,
+      password: values.password,
+      passwordConfirm: values.password,
+      photo: "me",
+    };
+    handleRegister(payload, {
+      onSuccess() {
+        router.push("/auth/verify");
       },
-      onError(error, variables, context) {
+      onError(error) {
         toast({
           variant: "destructive",
           title: "Invalid credentials.",
-          description:
-            error.message || "Make sure to enter correct email and password.",
+          description: error.message || "Make sure to fill the form correctly.",
         });
       },
     });
@@ -53,6 +62,46 @@ export const RegisterForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Lee"
+                      required
+                      disabled={isPending}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Delgaso"
+                      required
+                      disabled={isPending}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           <FormField
             control={form.control}
             name="email"
@@ -79,13 +128,7 @@ export const RegisterForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel
-                  htmlFor="password"
-                  className="flex items-center justify-between"
-                >
-                  Password
-                  <ForgotPassword />
-                </FormLabel>
+                <FormLabel htmlFor="password">Password</FormLabel>
                 <FormControl>
                   <PasswordInput
                     required
@@ -100,23 +143,21 @@ export const RegisterForm = () => {
             )}
           />
         </div>
+        <div className="mt-4 text-center text-sm">
+          Already have an account?{" "}
+          <Link className="underline underline-offset-2" href="login">
+            Login
+          </Link>
+        </div>
         <Button className="w-full" type="submit" disabled={isPending}>
           {isPending ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
             </>
           ) : (
-            "Login"
+            "Register"
           )}
         </Button>
-        <div className="relative">
-          <Button className="w-full" variant="outline" disabled>
-            Login with Google
-          </Button>
-          <Badge className="absolute -translate-y-1/2 right-2 top-1/2 text-center pointer-events-none">
-            Soon
-          </Badge>
-        </div>
       </form>
     </Form>
   );

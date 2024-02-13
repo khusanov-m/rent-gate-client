@@ -7,7 +7,7 @@ const BASE =
   "http://localhost:8000/api/v1" || "https://rent-gate-api.onrender.com/api/v1";
 
 const axiosInstance = axios.create({
-  baseURL: BASE,
+  baseURL: "https://rent-gate-api.onrender.com/api/v1",
   headers: {
     "Content-Type": "application/json",
   },
