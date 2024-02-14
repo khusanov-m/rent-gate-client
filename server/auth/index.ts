@@ -33,10 +33,10 @@ export const verifyAPI = async (id: string) => {
   if (res.data.status === "success") return res.data.message;
 };
 
-export const forgotPasswordAPI = async (payload: { email: string }) => {
+export const forgotPasswordAPI = async (email: string) => {
   const res = await axiosInstance.post<MessageResponse>(
     "/auth/forgotpassword",
-    payload
+    { email }
   );
   if (res.data.status === "success") return res.data.message;
 };

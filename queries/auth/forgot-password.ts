@@ -8,7 +8,8 @@ export const ForgotPasswordAction = () => {
     isPending,
     error,
   } = useMutation({
-    mutationFn: (payload: { email: string }) => forgotPasswordAPI(payload),
+    mutationFn: (payload: { email: string }) =>
+      forgotPasswordAPI(payload.email),
     mutationKey: ["forgot/password"],
     onMutate: (variables) => {
       // Do stuff before the mutation

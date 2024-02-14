@@ -32,7 +32,7 @@ export const resetPasswordSchema = z.object({
     .max(50, {
       message: "Password must be at most 50 characters long",
     }),
-  confirmPassword: z.string().refine((data) => data === "password", {
+  passwordConfirm: z.string().refine((data) => data === "password", {
     message: "Passwords do not match",
   }),
 });
@@ -79,7 +79,7 @@ export const changePasswordSchema = z.object({
     .max(50, {
       message: "Password must be at most 50 characters long",
     }),
-  confirmPassword: z.string().refine((data) => data === "newPassword", {
+  passwordConfirm: z.string().refine((data) => data === "newPassword", {
     message: "Passwords do not match",
   }),
 });
