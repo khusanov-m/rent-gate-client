@@ -39,7 +39,7 @@ export const ResetPasswordForm = () => {
     handleResetPassword(
       { id: token ?? "", data: values },
       {
-        onSuccess(data, variables, context) {
+        onSuccess(data) {
           toast({
             title: "Success",
             description: data || "Password reset successful.",

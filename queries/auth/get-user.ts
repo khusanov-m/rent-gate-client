@@ -1,4 +1,4 @@
-import { getUserAPI } from "@/server/auth/index";
+import { getUserAPI } from "@/api/auth/index";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useGetUserQuery() {

@@ -10,7 +10,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 
-export default function Page() {
+export default function VehiclePaymentInvoicePage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen py-12 bg-gray-100 dark:bg-gray-900">
       <Card className="w-full max-w-3xl p-8 space-y-6">

@@ -1,4 +1,4 @@
-import { verifyAPI } from "@/server/auth";
+import { verifyAPI } from "@/api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const VerifyEmailAction = () => {

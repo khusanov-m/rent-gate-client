@@ -23,19 +23,21 @@ export const forgotPasswordSchema = z.object({
 });
 export type forgotPasswordSchemaType = z.infer<typeof forgotPasswordSchema>;
 
-export const resetPasswordSchema = z.object({
-  password: z
-    .string()
-    .min(8, {
-      message: "Password must be at least 8 characters long",
-    })
-    .max(50, {
-      message: "Password must be at most 50 characters long",
-    }),
-  passwordConfirm: z.string().refine((data) => data === "password", {
+export const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, {
+        message: "Password must be at least 8 characters long",
+      })
+      .max(50, {
+        message: "Password must be at most 50 characters long",
+      }),
+    passwordConfirm: z.string(),
+  })
+  .refine((data) => data.password === data.passwordConfirm, {
     message: "Passwords do not match",
-  }),
-});
+  });
 export type resetPasswordSchemaType = z.infer<typeof resetPasswordSchema>;
 
 export const registerSchema = z.object({
@@ -68,19 +70,3 @@ export const registerSchema = z.object({
     }),
 });
 export type registerSchemaType = z.infer<typeof registerSchema>;
-
-export const changePasswordSchema = z.object({
-  oldPassword: z.string(),
-  newPassword: z
-    .string()
-    .min(8, {
-      message: "Password must be at least 8 characters long",
-    })
-    .max(50, {
-      message: "Password must be at most 50 characters long",
-    }),
-  passwordConfirm: z.string().refine((data) => data === "newPassword", {
-    message: "Passwords do not match",
-  }),
-});
-export type changePasswordSchemaType = z.infer<typeof changePasswordSchema>;

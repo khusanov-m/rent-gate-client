@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { DEMOVEHICLES } from "@/components/vehicle/vehicle.const";
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import {
+  ArrowLeft,
   CalendarDaysIcon,
   ChevronLeft,
   ChevronRight,
@@ -21,7 +21,11 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function VehiclePayment({ params }: { params: { id: string } }) {
+export default function VehiclePaymentPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const router = useRouter();
   const vehicle = DEMOVEHICLES.find((vehicle) => vehicle.id === params.id);
 
@@ -34,7 +38,7 @@ export default function VehiclePayment({ params }: { params: { id: string } }) {
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
         <div className="flex items-center gap-4">
           <Button onClick={() => router.back()} variant={"outline"}>
-            <ArrowLeftIcon className="h-4 w-4 -mx-2" />
+            <ArrowLeft className="h-4 w-4 -mx-2" />
             <span className="sr-only">Back</span>
           </Button>
 

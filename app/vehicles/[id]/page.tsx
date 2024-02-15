@@ -4,7 +4,7 @@ import RentForm from "@/components/vehicle/RentForm";
 import VehicleDetails from "@/components/vehicle/VehicleDetails";
 import { DEMOVEHICLES } from "@/components/vehicle/vehicle.const";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -107,7 +107,7 @@ export default function VehiclePage({ params }: { params: { id: string } }) {
             href="/vehicles"
             className={buttonVariants({ variant: "outline" })}
           >
-            <ArrowLeftIcon className="h-4 w-4 -mx-2" />
+            <ArrowLeft className="h-4 w-4 -mx-2" />
             <span className="sr-only">Back</span>
           </Link>
 

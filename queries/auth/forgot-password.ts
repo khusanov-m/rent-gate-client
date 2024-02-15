@@ -1,4 +1,4 @@
-import { forgotPasswordAPI } from "@/server/auth";
+import { forgotPasswordAPI } from "@/api/auth";
 import { useMutation } from "@tanstack/react-query";
 
 export const ForgotPasswordAction = () => {
@@ -11,15 +11,6 @@ export const ForgotPasswordAction = () => {
     mutationFn: (payload: { email: string }) =>
       forgotPasswordAPI(payload.email),
     mutationKey: ["forgot/password"],
-    onMutate: (variables) => {
-      // Do stuff before the mutation
-    },
-    onError: (error, variables, context) => {
-      // Do stuff on error
-    },
-    onSuccess: (data, variables, context) => {
-      // Do stuff on success
-    },
   });
 
   return { handleForgotPassword, data, isPending, error };

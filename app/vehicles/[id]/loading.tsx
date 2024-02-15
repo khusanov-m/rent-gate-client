@@ -1,3 +1,3 @@
-export default function Loading() {
+export default function VehicleLoading() {
   return <div>LOADING</div>;
 }
