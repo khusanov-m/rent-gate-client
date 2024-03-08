@@ -1,6 +1,6 @@
 import Image from "next/image";
 import FeaturedFeed from "../vehicle/FeaturedFeed";
-import SearchVehicle from "../vehicle/SearchVehicle";
+import RootSearchVehicle from "../vehicle/RootSearchVehicle";
 import VehicleCategories from "../vehicle/VehicleCategories";
 
 const HomeHeader = () => {
@@ -17,7 +17,7 @@ const HomeHeader = () => {
               suits your needs and enjoy a hassle-free rental experience.
             </p>
 
-            <SearchVehicle />
+            <RootSearchVehicle />
           </div>
         </div>
 
