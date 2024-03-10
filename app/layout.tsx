@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/layout/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/lib/query-provider";
 import { cn, makeMetaData } from "@/lib/utils";
@@ -22,7 +22,7 @@ export default async function RootLayout({
       >
         <Providers>
           <Toaster />
-          <Navbar  />
+          <Navbar />
           {children}
           <SoonerToaster />
         </Providers>

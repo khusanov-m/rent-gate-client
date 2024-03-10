@@ -16,7 +16,7 @@ export type UserCountryResponse = {
   as: string;
   query: string;
 };
-export const getUserCountryAPI = async () => {
+export const getUserLocationAPI = async () => {
   const res = await axiosInstance.get<UserCountryResponse>(
     "http://ip-api.com/json"
   );

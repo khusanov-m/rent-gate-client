@@ -44,8 +44,4 @@ axiosInstance.interceptors.response.use(
 );
 // End of Response interceptor
 
-export const setAxiosToken = (token: string) => {
-  axiosInstance.defaults.headers.common["Authorization"] = token;
-};
-
 export default axiosInstance;

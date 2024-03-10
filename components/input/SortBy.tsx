@@ -1,25 +1,40 @@
-import { Button } from "./ui/button";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import * as React from "react";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 
 const SortBy = ({
-  value,
-  setValue,
   placeholder,
   icon: Icon,
   options,
 }: {
-  value: string;
-  setValue: (value: string) => void;
   placeholder: string;
   icon?: React.ReactNode;
   options: { key: string; value: string }[];
 }) => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const [sortBy, setSortBy] = React.useState("");
+
+  const onSortChange = (value: string) => {
+    // get existing params and update the sort param
+    const params = new URLSearchParams();
+    searchParams.forEach((value, key) => {
+      params.set(key, value);
+    });
+    params.set("sortBy", value);
+    router.replace(`${pathname}?${params.toString()}`, {});
+    setSortBy(value);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,7 +44,7 @@ const SortBy = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[200px]">
-        <DropdownMenuRadioGroup value={value} onValueChange={setValue}>
+        <DropdownMenuRadioGroup value={sortBy} onValueChange={onSortChange}>
           {options.map((option) => (
             <DropdownMenuRadioItem key={option.key} value={option.key}>
               {option.value}

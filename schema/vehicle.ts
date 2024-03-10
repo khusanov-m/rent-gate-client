@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export enum EDriverOption {
   WITH_DRIVER = "with_driver",
   WITHOUT_DRIVER = "without_driver",
@@ -35,8 +37,16 @@ export type TVehicle = {
 
   location: string;
   in_subscription_type: string;
-  images: string;
+  image: string;
 
   created_at: string;
   updated_at: string;
 };
+
+export const vehiclesFilterSchema = z.object({
+  location: z.string(),
+  priceMin: z.string().refine((val) => val === "" || /^\d+$/.test(val)),
+  priceMax: z.string().refine((val) => val === "" || /^\d+$/.test(val)),
+  vehicleType: z.string(),
+});
+export type vehiclesFilterTypeSchema = z.infer<typeof vehiclesFilterSchema>;

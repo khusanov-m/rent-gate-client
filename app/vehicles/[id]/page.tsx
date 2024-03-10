@@ -1,8 +1,8 @@
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import RentForm from "@/components/vehicle/RentForm";
-import VehicleDetails from "@/components/vehicle/VehicleDetails";
-import { DEMOVEHICLES } from "@/components/vehicle/vehicle.const";
+import VehicleItem from "@/components/vehicle/VehicleItem";
+import { DEMO_VEHICLES } from "@/components/vehicle/vehicle.const";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { ArrowLeft } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
@@ -21,7 +21,7 @@ export async function generateMetadata(
   const id = params.id;
 
   // fetch data
-  const product = DEMOVEHICLES.find((vehicle) => vehicle.id === id);
+  const product = DEMO_VEHICLES.find((vehicle) => vehicle.id === id);
 
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
@@ -36,8 +36,8 @@ export async function generateMetadata(
 }
 
 export default function VehiclePage({ params }: { params: { id: string } }) {
-  const vehicle = DEMOVEHICLES.find((vehicle) => vehicle.id === params.id);
-  const featured = DEMOVEHICLES.filter(
+  const vehicle = DEMO_VEHICLES.find((vehicle) => vehicle.id === params.id);
+  const featured = DEMO_VEHICLES.filter(
     (v) =>
       v.id !== vehicle?.id &&
       v.availability === "Available" &&
@@ -117,7 +117,7 @@ export default function VehiclePage({ params }: { params: { id: string } }) {
           {featuredVehicles}
         </div>
 
-        {vehicle && <VehicleDetails vehicle={vehicle} isForm={true} />}
+        {vehicle && <VehicleItem vehicle={vehicle} isForm={true} />}
       </aside>
 
       <RentForm id={vehicle.id} />

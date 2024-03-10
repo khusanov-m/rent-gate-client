@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { DEMOVEHICLES } from "@/components/vehicle/vehicle.const";
+import { DEMO_VEHICLES } from "@/components/vehicle/vehicle.const";
 import {
   ArrowLeft,
   CalendarDaysIcon,
@@ -27,7 +27,7 @@ export default function VehiclePaymentPage({
   params: { id: string };
 }) {
   const router = useRouter();
-  const vehicle = DEMOVEHICLES.find((vehicle) => vehicle.id === params.id);
+  const vehicle = DEMO_VEHICLES.find((vehicle) => vehicle.id === params.id);
 
   if (!vehicle) {
     return <>NOT FOUND</>;

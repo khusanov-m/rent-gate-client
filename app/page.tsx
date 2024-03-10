@@ -1,8 +1,8 @@
-import Footer from "@/components/Footer";
 import OurCustomers from "@/components/info/OurCustomers";
 import PerformanceSecurity from "@/components/info/PerformanceSecurity";
 import SignUpCTA from "@/components/info/SignUpCTA";
 import WhyWe from "@/components/info/WhyWe";
+import Footer from "@/components/layout/Footer";
 import HomeHeader from "@/components/root/HomeHeader";
 import HomeServices from "@/components/root/HomeServices";
 

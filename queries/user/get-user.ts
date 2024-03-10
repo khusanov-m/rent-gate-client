@@ -9,7 +9,7 @@ export default function useGetUserQuery() {
     retry: 0,
   });
   if (data?.status === "success") {
-    return { user: data.data.user, isLoading, isError };
+    return { user: data.user, isLoading, isError };
   }
 
   return { user: null, isLoading, isError };

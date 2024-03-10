@@ -1,4 +1,4 @@
-export const DEMOVEHICLES = [
+export const DEMO_VEHICLES = [
   {
     id: "tesla_sport",
     name: "Tesla Sport",
@@ -258,5 +258,16 @@ export const DEMOVEHICLES = [
     availability: "Available",
     color: "Black",
     driver_option: "without_driver",
+  },
+];
+
+export const SORT_BY_OPTIONS = [
+  {
+    key: "price-asc",
+    value: "Price: Low to High",
+  },
+  {
+    key: "price-desc",
+    value: "Price: High to Low",
   },
 ];

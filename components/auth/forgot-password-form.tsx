@@ -47,7 +47,7 @@ const ForgotPasswordForm = () => {
           description:
             data || "Password reset code has been sent to your email.",
         });
-        router.push("/auth/reset-password");
+        router.push("/auth/check-email");
       },
     });
   }

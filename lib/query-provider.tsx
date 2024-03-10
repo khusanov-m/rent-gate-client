@@ -7,8 +7,8 @@ import * as React from "react";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 6 * 1000,
-      refetchInterval: 6 * 1000,
+      staleTime: 10 * 1000,
+      refetchInterval: 10 * 1000,
     },
   },
 });

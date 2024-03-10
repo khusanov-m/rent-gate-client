@@ -1,12 +1,12 @@
 "use client";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import useGetUserQuery from "@/queries/auth/get-user";
+import useGetUserQuery from "@/queries/user/get-user";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import UserAccountNav from "../UserAccountNav";
+import { buttonVariants } from "../ui/button";
 import MobileNav from "./MobileNav";
-import UserAccountNav from "./UserAccountNav";
-import { buttonVariants } from "./ui/button";
 
 export default function Navbar() {
   const { user, isLoading, isError } = useGetUserQuery();

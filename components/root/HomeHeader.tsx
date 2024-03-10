@@ -1,6 +1,6 @@
 import Image from "next/image";
-import FeaturedFeed from "../vehicle/FeaturedFeed";
-import RootSearchVehicle from "../vehicle/RootSearchVehicle";
+import FeaturedFeed from "./FeaturedFeed";
+import RootSearchVehicle from "./RootSearchVehicle";
 import VehicleCategories from "../vehicle/VehicleCategories";
 
 const HomeHeader = () => {

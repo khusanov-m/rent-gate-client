@@ -56,7 +56,7 @@ export const resetPasswordAPI = async (payload: resetPasswordPayload) => {
   if (res.data.status === "success") return res.data.message;
 };
 
-export type UserResponse = { status: string; data: { user: UserDetails } };
+export type UserResponse = { status: string; user: UserDetails };
 export type UserDetails = {
   id: string;
   name: string;
