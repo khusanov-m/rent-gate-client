@@ -5,7 +5,7 @@ import {
 } from "@/schema/vehicle";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DashIcon } from "@radix-ui/react-icons";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import {
@@ -28,14 +28,15 @@ import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
 
-const VehicleFilter = () => {
+export default function VehicleFilter() {
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const { location } = useGetUserLocation();
@@ -44,20 +45,19 @@ const VehicleFilter = () => {
     resolver: zodResolver(vehiclesFilterSchema),
     defaultValues: {
       location: location?.city ?? "",
-      priceMin: "",
-      priceMax: "",
-      vehicleType: "",
+      priceMin: searchParams.get("priceMin") ?? "",
+      priceMax: searchParams.get("priceMax") ?? "",
+      vehicleType: searchParams.get("type") ?? "",
     },
   });
 
   const onSubmit = (val: vehiclesFilterTypeSchema) => {
-    console.log(val);
     const params = new URLSearchParams();
-    params.set("location", val.location);
-    params.set("type", val.vehicleType);
-    params.set("priceMin", val.priceMin);
-    params.set("priceMax", val.priceMax);
-    router.replace(`${pathname}?${params.toString()}`, {});
+    if (val.location) params.set("location", val.location);
+    if (val.vehicleType) params.set("type", val.vehicleType);
+    if (val.priceMin) params.set("priceMin", val.priceMin);
+    if (val.priceMax) params.set("priceMax", val.priceMax);
+    router.replace(`?${params.toString()}`, {});
   };
 
   const onReset = () => {
@@ -75,8 +75,11 @@ const VehicleFilter = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card className="sticky top-[78px]">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="sticky top-[78px]"
+      >
+        <Card>
           <CardHeader>
             <CardTitle>Filter Vehicles</CardTitle>
           </CardHeader>
@@ -147,17 +150,26 @@ const VehicleFilter = () => {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Car" />
+                            <SelectValue placeholder="Select a type" />
                           </SelectTrigger>
                         </FormControl>
 
                         <SelectContent>
-                          <SelectItem value="car">Car</SelectItem>
-                          <SelectItem value="bike">Motorbike</SelectItem>
-                          <SelectItem value="rv">RV</SelectItem>
-                          <SelectItem value="boat">Boat</SelectItem>
-                          <SelectItem value="truck">Truck</SelectItem>
-                          <SelectItem value="bus">Bus</SelectItem>
+                          <SelectGroup>
+                            <SelectLabel>Car</SelectLabel>
+                            <SelectItem value="sedan">Sedan</SelectItem>
+                            <SelectItem value="SUV">SUV</SelectItem>
+                            <SelectItem value="coupe">Coupe</SelectItem>
+                          </SelectGroup>
+
+                          <SelectGroup>
+                            <SelectLabel>Other</SelectLabel>
+                            <SelectItem value="bike">Motorbike</SelectItem>
+                            <SelectItem value="rv">RV</SelectItem>
+                            <SelectItem value="boat">Boat</SelectItem>
+                            <SelectItem value="truck">Truck</SelectItem>
+                            <SelectItem value="bus">Bus</SelectItem>
+                          </SelectGroup>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -177,6 +189,4 @@ const VehicleFilter = () => {
       </form>
     </Form>
   );
-};
-
-export default VehicleFilter;
+}

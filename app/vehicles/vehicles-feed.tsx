@@ -2,33 +2,37 @@
 
 import useGetVehicles from "@/queries/vehicle/get-vehicles";
 import { LineHeightIcon } from "@radix-ui/react-icons";
-import { useRouter, useSearchParams } from "next/navigation";
+import {
+  ReadonlyURLSearchParams,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import * as React from "react";
-import SortBy from "../input/SortBy";
-import { Button } from "../ui/button";
-import { Skeleton } from "../ui/skeleton";
-import VehicleFilter from "./VehicleFilter";
-import VehicleItem from "./VehicleItem";
-import { SORT_BY_OPTIONS } from "./vehicle.const";
+import SortBy from "../../components/input/SortBy";
+import { Button } from "../../components/ui/button";
+import { Skeleton } from "../../components/ui/skeleton";
+import VehicleFilter from "../../components/vehicle/VehicleFilter";
+import VehicleItem from "../../components/vehicle/VehicleItem";
+import { SORT_BY_OPTIONS } from "../../components/vehicle/vehicle.const";
 
-const VehiclesFeed = () => {
+function getSearchParams(value: ReadonlyURLSearchParams) {
+  const params = new URLSearchParams();
+  value.forEach((value, key) => {
+    params.set(key, value);
+  });
+  return params;
+}
+
+export default function VehiclesFeed() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  if (!searchParams.get("page")) {
-    const params = new URLSearchParams();
-    searchParams.forEach((value, key) => {
-      params.set(key, value);
-    });
-    params.set("page", "1");
-    router.replace(`?${params.toString()}`, {});
-  }
-  if (!searchParams.get("limit")) {
-    const params = new URLSearchParams();
-    searchParams.forEach((value, key) => {
-      params.set(key, value);
-    });
-    params.set("limit", "5");
+  const page = searchParams.get("page");
+  const limit = searchParams.get("limit");
+  if (!page || !limit) {
+    const params = getSearchParams(searchParams);
+    if (!page) params.set("page", "1");
+    if (!limit) params.set("limit", "5");
     router.replace(`?${params.toString()}`, {});
   }
 
@@ -38,14 +42,13 @@ const VehiclesFeed = () => {
   const priceMax = searchParams.get("priceMax");
 
   const { data, isError, isFetched, isLoading } = useGetVehicles();
-  console.log(data);
 
   const vehicles = React.useMemo(() => {
     const arr = data?.vehicles.filter((vehicle) => {
       const filterResuts = [];
 
       if (vehicleType) {
-        filterResuts.push(vehicleType === vehicle.type);
+        filterResuts.push(vehicleType === vehicle.vehicle_type);
       }
 
       if (priceMin && priceMax) {
@@ -103,9 +106,16 @@ const VehiclesFeed = () => {
           <div className="flex items-center justify-between">
             <div className="flex space-x-4">
               <span className="text-sm text-gray-500">
-                {vehicles.length > 0
-                  ? `Showing 1-${data?.count} of ${data?.pagination.total_items} results`
-                  : `Showing 0 results of ${data?.pagination.total_items} results`}
+                {vehicles.length > 0 && data
+                  ? `Showing ${
+                      (Number(page) - 1) * vehicles.length + 1
+                    }-${Math.min(
+                      Number(page) * vehicles.length,
+                      data.pagination.total_items
+                    )} of ${data?.pagination.total_items || 0} results`
+                  : `Showing 0 results of ${
+                      data?.pagination.total_items || 0
+                    } results`}
               </span>
             </div>
 
@@ -136,6 +146,4 @@ const VehiclesFeed = () => {
       </div>
     </div>
   );
-};
-
-export default VehiclesFeed;
+}

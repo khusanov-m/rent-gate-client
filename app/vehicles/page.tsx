@@ -1,15 +1,22 @@
-"use client";
+import { getVehiclesListAPI } from "@/api/vehicles";
+import VehiclesFeed from "@/app/vehicles/vehicles-feed";
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
 
-import VehiclesFeed from "@/components/vehicle/VehiclesFeed";
-import useGetVehicles from "@/queries/vehicle/get-vehicles";
+export default async function VehiclesPage() {
+  const queryClient = new QueryClient();
 
-export default function VehiclesPage() {
-  const { data, isError, isFetched, isLoading } = useGetVehicles();
-  console.log(data);
+  await queryClient.prefetchQuery({
+    queryKey: ["vehicles"],
+    queryFn: () => getVehiclesListAPI(),
+  });
 
   return (
-    <>
+    <HydrationBoundary state={dehydrate(queryClient)}>
       <VehiclesFeed />
-    </>
+    </HydrationBoundary>
   );
 }

@@ -16,3 +16,15 @@ export const getVehiclesListAPI = async (query: string = "") => {
   }
   return res.data.data;
 };
+
+export type VehicleItemResponse = {
+  data: TVehicle;
+  status: string;
+}
+export const getVehicleItemAPI = async (id: string) => {
+  const res = await axiosInstance.get<VehicleItemResponse>("/vehicles/" + id);
+  if (res.data.status === "success") {
+    return res.data.data;
+  }
+  return res.data.data;
+}

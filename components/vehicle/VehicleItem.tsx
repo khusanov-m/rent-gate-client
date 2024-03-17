@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { TVehicle } from "@/schema/vehicle";
-import { Fuel, Luggage, Navigation, Sliders, UsersRound } from "lucide-react";
+import { Fuel, Luggage, Navigation, UsersRound, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
@@ -20,7 +20,7 @@ const VehicleItem = ({
 
   return (
     <Card className="relative group overflow-hidden">
-      <div className="relative">
+      <div>
         <Image
           alt="Vehicle Image"
           className="object-cover w-full h-48 rounded-t-lg group-hover:scale-110 transition-transform duration-300"
@@ -32,37 +32,34 @@ const VehicleItem = ({
           }}
           width="400"
         />
-        <span
-          className={cn(
-            "w-8 h-8 rounded-full inline-block absolute -top-3 -right-3"
-          )}
-          style={{
-            backgroundColor: `${vehicle.color}`,
-          }}
-        ></span>
       </div>
       <CardContent className="pt-4">
-        <h3 className="font-semibold text-lg">
-          {vehicle.make} {vehicle.model}
+        <h3 className="font-semibold text-lg relative">
+          <span>
+            {vehicle.make} {vehicle.model}
+          </span>
+          <span
+            className={cn(
+              "size-6 rounded-full inline-block border border-gray-400 absolute right-0 top-1/2 -translate-y-1/2"
+            )}
+            style={{
+              background: `${vehicle.color}`,
+            }}
+          ></span>
         </h3>
-        <p className="text-gray-500 text-sm mb-3">
-          {vehicle.description} / {vehicle.year}
-        </p>
         <div className="text-sm flex-wrap justify-center sm:justify-start flex items-center gap-4">
           <p className="flex gap-2">
-            <UsersRound size={"20"} /> {vehicle.number_of_seats}
+            <UsersRound size={20} /> {vehicle.number_of_seats}
           </p>
           <p className="flex gap-2">
-            <Luggage size={"20"} /> {vehicle.luggage_capacity}kg
+            <Luggage size={20} /> {vehicle.luggage_capacity}kg
           </p>
           <p className="flex gap-2">
-            <Fuel size={"20"} /> {vehicle.fuel_type}
+            <Fuel size={20} /> {vehicle.power_type} <Zap size={20} />
           </p>
+
           <p className="flex gap-2">
-            <Sliders size={"20"} /> {vehicle.gear_type}
-          </p>
-          <p className="flex gap-2">
-            <Navigation size={"20"} /> {vehicle.driver_option}
+            <Navigation size={20} /> {vehicle.driver_option}
           </p>
         </div>
         <div className="flex items-center justify-between mt-4">

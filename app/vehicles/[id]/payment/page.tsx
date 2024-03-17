@@ -1,7 +1,7 @@
 "use client";
 
 import { Icons } from "@/components/Icons";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,7 +10,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { DEMO_VEHICLES } from "@/components/vehicle/vehicle.const";
+import useGetVehicleByID from "@/queries/vehicle/get-vehicle-by-id";
+import useStore from "@/store/useStore";
+import { TVehicleStoreState, useVehicleStore } from "@/store/useVehicle";
+import { differenceInCalendarDays } from "date-fns";
 import {
   ArrowLeft,
   CalendarDaysIcon,
@@ -27,9 +30,19 @@ export default function VehiclePaymentPage({
   params: { id: string };
 }) {
   const router = useRouter();
-  const vehicle = DEMO_VEHICLES.find((vehicle) => vehicle.id === params.id);
+  const { data: vehicle } = useGetVehicleByID(params.id);
 
-  if (!vehicle) {
+  const vehicleStore = useStore<TVehicleStoreState, TVehicleStoreState>(
+    useVehicleStore,
+    (state) => state
+  );
+
+  const onSubmit = () => {
+    // onSuccess "invoice/" + id
+  };
+  console.log(vehicleStore);
+
+  if (!vehicle || !vehicleStore) {
     return <>NOT FOUND</>;
   }
 
@@ -64,19 +77,22 @@ export default function VehiclePaymentPage({
                 <div className="grid gap-4">
                   <div className="flex items-center gap-2">
                     <Icons.Car className="h-6 w-6" />
-                    <div>
-                      <div className="font-medium">{vehicle.name}</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
-                        License plate: ABC123
-                      </div>
+                    <div className="font-medium">
+                      {vehicle.make} {vehicle.model}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <CalendarDaysIcon className="h-6 w-6" />
                     <div>
-                      <div className="font-medium">Pick-up: 10:00 AM</div>
+                      <div className="font-medium">
+                        Pick-up:
+                        {vehicleStore.rentForm?.date &&
+                          vehicleStore.rentForm.date.from.toString()}
+                      </div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">
-                        Drop-off: 12:00 PM
+                        Drop-off:
+                        {vehicleStore.rentForm?.date?.to &&
+                          vehicleStore.rentForm?.date?.to.toString()}
                       </div>
                     </div>
                   </div>
@@ -92,7 +108,16 @@ export default function VehiclePaymentPage({
                     </div>
                   </div>
 
-                  <p>List of ADD-ons: ...</p>
+                  <div>
+                    <p>List of ADD-ons:</p>
+                    <ul className="list-disc pl-6">
+                      {vehicleStore.rentForm?.services?.map((service) => (
+                        <li key={service.id}>
+                          {service.option} - {service.price}$
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -103,25 +128,29 @@ export default function VehiclePaymentPage({
               <CardContent className="grid gap-4">
                 <div className="flex items-center">
                   <div>Subtotal</div>
-                  <div className="ml-auto">$169.00</div>
+                  <div className="ml-auto">
+                    $
+                    {(vehicleStore.vehicle?.price_per_day || 0) *
+                      differenceInCalendarDays(
+                        vehicleStore.rentForm?.date.to || 0,
+                        vehicleStore.rentForm?.date.from || 0
+                      )}
+                  </div>
                 </div>
                 <div className="flex items-center">
                   <div>Discount</div>
-                  <div className="ml-auto">-$19.00</div>
+                  <div className="ml-auto">-${vehicleStore.discountPrice}</div>
                 </div>
                 <Separator />
                 <div className="flex items-center font-medium">
                   <div>Total</div>
-                  <div className="ml-auto">$150.00</div>
+                  <div className="ml-auto">${vehicleStore.totalPrice}</div>
                 </div>
               </CardContent>
               <CardFooter className="flex items-center gap-2">
-                <Link
-                  href={"invoice/as2d-14r3-1sdf-vd03"}
-                  className={buttonVariants({ size: "sm" })}
-                >
+                <Button size="sm" variant="outline">
                   Submit Payment
-                </Link>
+                </Button>
 
                 <Button size="sm" variant="outline">
                   Recieve invoice
