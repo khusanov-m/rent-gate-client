@@ -4,7 +4,7 @@ import axios from "axios";
 // "http://localhost:8000"
 
 const BASE =
-  "http://localhost:8000/api/v1" || "https://rent-gate-api.onrender.com/api/v1";
+  "http://localhost:9000/api/v1" || "https://rent-gate-api.onrender.com/api/v1";
 
 const axiosInstance = axios.create({
   baseURL: BASE,

@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useGetVehicleByID from "@/queries/vehicle/get-vehicle-by-id";
-import { vehicleRentSchema, vehicleRentTypeSchema } from "@/schema/vehicle";
+import { vehicleRentSchema, type TVehicleRentSchema } from "@/schema/vehicle";
 import { useVehicleStore } from "@/store/useVehicle";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PopoverTrigger } from "@radix-ui/react-popover";
@@ -39,7 +39,7 @@ import { VEHICLE_SERVICES } from "./vehicle.const";
 
 export default function RentForm({ id }: { id: string }) {
   const router = useRouter();
-  const form = useForm<vehicleRentTypeSchema>({
+  const form = useForm<TVehicleRentSchema>({
     resolver: zodResolver(vehicleRentSchema),
     defaultValues: {
       vehicleId: id,
@@ -50,9 +50,10 @@ export default function RentForm({ id }: { id: string }) {
   });
 
   const { data: vehicle } = useGetVehicleByID(id);
+
   const { setRentForm, setVehicle } = useVehicleStore();
 
-  const onSubmit = (val: vehicleRentTypeSchema) => {
+  const onSubmit = (val: TVehicleRentSchema) => {
     if (vehicle) setVehicle(vehicle);
     setRentForm(val);
     router.push(`/vehicles/${id}/payment`);

@@ -29,12 +29,15 @@ export default function VehiclesFeed() {
 
   const page = searchParams.get("page");
   const limit = searchParams.get("limit");
-  if (!page || !limit) {
-    const params = getSearchParams(searchParams);
-    if (!page) params.set("page", "1");
-    if (!limit) params.set("limit", "5");
-    router.replace(`?${params.toString()}`, {});
-  }
+
+  React.useEffect(() => {
+    if (!page || !limit) {
+      const params = getSearchParams(searchParams);
+      if (!page) params.set("page", "1");
+      if (!limit) params.set("limit", "5");
+      router.replace(`?${params.toString()}`, {});
+    }
+  }, []);
 
   const sortBy = searchParams.get("sortBy");
   const vehicleType = searchParams.get("type");

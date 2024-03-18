@@ -1,4 +1,6 @@
 import axiosInstance from "@/lib/axios";
+import { MessageResponse } from "@/types/config.type";
+import { UserDetails } from "@/types/user.type";
 
 export type LoginPayload = { email: string; password: string };
 export type LoginResponse = { status: string; token: string };
@@ -14,10 +16,7 @@ export type RegisterPayload = {
   passwordConfirm: string;
   photo: string;
 };
-export type MessageResponse = {
-  message: string;
-  status: string;
-};
+
 export const registerAPI = async (payload: RegisterPayload) => {
   const res = await axiosInstance.post<MessageResponse>(
     "/auth/register",
@@ -57,17 +56,7 @@ export const resetPasswordAPI = async (payload: resetPasswordPayload) => {
 };
 
 export type UserResponse = { status: string; user: UserDetails };
-export type UserDetails = {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  photo: string;
-  provider: string;
-  verified: boolean;
-  created_at: string;
-  updated_at: string;
-};
+
 export const getUserAPI = async () => {
   const res = await axiosInstance.get<UserResponse>("/users/me");
   return res.data;

@@ -1,15 +1,31 @@
 "use client";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import useGetUserLocation from "@/queries/user/get-country";
 import useGetUserQuery from "@/queries/user/get-user";
+import useStore from "@/store/useStore";
+import { TUserStoreState, useUserStore } from "@/store/useUser";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import { useEffect } from "react";
 import UserAccountNav from "../UserAccountNav";
 import { buttonVariants } from "../ui/button";
 import MobileNav from "./MobileNav";
 
 export default function Navbar() {
-  const { user, isLoading, isError } = useGetUserQuery();
+  const { user, isLoading } = useGetUserQuery();
+  const { location } = useGetUserLocation();
+
+  const userStore = useStore<TUserStoreState, TUserStoreState>(
+    useUserStore,
+    (state) => state
+  );
+
+  useEffect(() => {
+    if (user) {
+      userStore?.setUser(user);
+    }
+  }, [user]);
 
   const loaderView = (
     <>

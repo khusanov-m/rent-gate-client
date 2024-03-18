@@ -12,8 +12,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import useGetVehicleByID from "@/queries/vehicle/get-vehicle-by-id";
 import useStore from "@/store/useStore";
-import { TVehicleStoreState, useVehicleStore } from "@/store/useVehicle";
-import { differenceInCalendarDays } from "date-fns";
+import { TUserStoreState, useUserStore } from "@/store/useUser";
+import { useVehicleStore, type TVehicleStoreState } from "@/store/useVehicle";
 import {
   ArrowLeft,
   CalendarDaysIcon,
@@ -36,11 +36,16 @@ export default function VehiclePaymentPage({
     useVehicleStore,
     (state) => state
   );
+  const userStore = useStore<TUserStoreState, TUserStoreState>(
+    useUserStore,
+    (state) => state
+  );
+
+  console.log(userStore);
 
   const onSubmit = () => {
-    // onSuccess "invoice/" + id
+    router.push("invoice/" + 1234567);
   };
-  console.log(vehicleStore);
 
   if (!vehicle || !vehicleStore) {
     return <>NOT FOUND</>;
@@ -127,15 +132,13 @@ export default function VehiclePaymentPage({
               </CardHeader>
               <CardContent className="grid gap-4">
                 <div className="flex items-center">
-                  <div>Subtotal</div>
-                  <div className="ml-auto">
-                    $
-                    {(vehicleStore.vehicle?.price_per_day || 0) *
-                      differenceInCalendarDays(
-                        vehicleStore.rentForm?.date.to || 0,
-                        vehicleStore.rentForm?.date.from || 0
-                      )}
-                  </div>
+                  <div>Rental period</div>
+                  <div className="ml-auto">${vehicleStore.rentPrice}</div>
+                </div>
+
+                <div className="flex items-center">
+                  <div>Add-ONS</div>
+                  <div className="ml-auto">${vehicleStore.servicesPrice}</div>
                 </div>
                 <div className="flex items-center">
                   <div>Discount</div>
@@ -148,7 +151,7 @@ export default function VehiclePaymentPage({
                 </div>
               </CardContent>
               <CardFooter className="flex items-center gap-2">
-                <Button size="sm" variant="outline">
+                <Button size="sm" variant="outline" onClick={onSubmit}>
                   Submit Payment
                 </Button>
 
@@ -170,7 +173,7 @@ export default function VehiclePaymentPage({
                 <CardContent className="text-sm">
                   <div className="grid gap-1">
                     <Link className="text-blue-600 underline" href="#">
-                      Sophia Anderson
+                      {userStore?.user?.name}
                     </Link>
                     <div>23 total orders</div>
                   </div>
@@ -184,10 +187,10 @@ export default function VehiclePaymentPage({
                 <CardContent className="text-sm">
                   <div className="grid gap-1">
                     <Link className="text-blue-600" href="#">
-                      m@example.com
+                      {userStore?.user?.email}
                     </Link>
                     <div className="text-gray-500 dark:text-gray-400">
-                      +998 90 123 45 67
+                      {userStore?.user?.id}
                     </div>
                   </div>
                 </CardContent>
@@ -200,11 +203,17 @@ export default function VehiclePaymentPage({
                 </CardHeader>
                 <CardContent className="text-sm">
                   <div>
-                    Master Card: 1234 **** **** **56
+                    Card type:{" "}
+                    <span className="uppercase">
+                      {userStore?.payment?.brand}
+                    </span>
                     <br />
-                    Card owner: Sophia Anderson
+                    Card number: **** **** **** {userStore?.payment?.last4}
                     <br />
-                    Expiry: 12/28
+                    Card owner: {userStore?.user?.name}
+                    <br />
+                    Expiry: {userStore?.payment?.exp_month}/
+                    {userStore?.payment?.exp_year}
                   </div>
                 </CardContent>
               </div>
@@ -214,8 +223,11 @@ export default function VehiclePaymentPage({
                 <CardHeader>
                   <CardTitle>Billing address</CardTitle>
                 </CardHeader>
-                <CardContent className="text-sm">
-                  Same as shipping address
+                <CardContent className="text-sm space-x-1">
+                  <span>{userStore?.billingAddress?.city}</span>,
+                  <span>{userStore?.billingAddress?.country}</span>,
+                  <span>{userStore?.billingAddress?.countryCode}</span>,
+                  <span>{userStore?.billingAddress?.zip}</span>
                 </CardContent>
               </div>
             </Card>

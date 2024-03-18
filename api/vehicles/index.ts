@@ -1,6 +1,6 @@
 import axiosInstance from "@/lib/axios";
-import { TVehicle } from "@/schema/vehicle";
-import { PagingConfig } from "@/types/config";
+import { PagingConfig } from "@/types/config.type";
+import type { TVehicle } from "@/types/vehicle.type";
 
 export type VehiclesPagingResponse = {
   data: {

@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
-import { TVehicle } from "@/schema/vehicle";
 import { Fuel, Luggage, Navigation, UsersRound, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
+import type { TVehicle } from "@/types/vehicle.type";
 
 const VehicleItem = ({
   vehicle,

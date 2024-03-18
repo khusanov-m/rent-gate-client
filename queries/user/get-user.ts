@@ -2,7 +2,7 @@ import { getUserAPI } from "@/api/auth/index";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useGetUserQuery() {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, isFetched } = useQuery({
     queryFn: getUserAPI,
     queryKey: ["user"],
     refetchInterval: 1000 * 60 * 60 * 24,
@@ -12,5 +12,5 @@ export default function useGetUserQuery() {
     return { user: data.user, isLoading, isError };
   }
 
-  return { user: null, isLoading, isError };
+  return { user: null, isLoading, isError, isFetched };
 }

@@ -1,8 +1,5 @@
 import useGetUserLocation from "@/queries/user/get-country";
-import {
-  vehiclesFilterSchema,
-  vehiclesFilterTypeSchema,
-} from "@/schema/vehicle";
+import { type TVehiclesFilterSchema, vehiclesFilterSchema } from "@/schema/vehicle";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DashIcon } from "@radix-ui/react-icons";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -41,7 +38,7 @@ export default function VehicleFilter() {
 
   const { location } = useGetUserLocation();
 
-  const form = useForm<vehiclesFilterTypeSchema>({
+  const form = useForm<TVehiclesFilterSchema>({
     resolver: zodResolver(vehiclesFilterSchema),
     defaultValues: {
       location: location?.city ?? "",
@@ -51,7 +48,7 @@ export default function VehicleFilter() {
     },
   });
 
-  const onSubmit = (val: vehiclesFilterTypeSchema) => {
+  const onSubmit = (val: TVehiclesFilterSchema) => {
     const params = new URLSearchParams();
     if (val.location) params.set("location", val.location);
     if (val.vehicleType) params.set("type", val.vehicleType);
