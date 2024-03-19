@@ -33,10 +33,12 @@ export const useVehicleStore = create<TVehicleStoreState>()(
           get().rentForm?.date.to || 0,
           get().rentForm?.date.from || 0
         );
+        console.log(diffs);
+
         const rentPrice =
           diffs > 1
             ? (get().vehicle?.price_per_day || 0) * diffs
-            : (get().vehicle?.price_per_hour || 0) * diffs;
+            : (get().vehicle?.price_per_hour || 0) * 24;
         const totalPrice =
           rentPrice + (servicesPrice || 0) - get().discountPrice;
         return set({ vehicle, rentPrice, servicesPrice, totalPrice });

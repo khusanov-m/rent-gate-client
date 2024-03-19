@@ -54,3 +54,13 @@ export function makeMetaData({
     }),
   };
 }
+
+export function formatPrice(amount: string | number | undefined) {
+  if (amount && typeof amount === "string" && isNaN(Number(amount)))
+    return amount;
+
+  return new Intl.NumberFormat("ru-RU", {
+    style: "currency",
+    currency: "USD",
+  }).format(Number(amount));
+}

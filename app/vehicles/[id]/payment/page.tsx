@@ -1,6 +1,7 @@
 "use client";
 
 import { Icons } from "@/components/Icons";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,7 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { formatPrice } from "@/lib/utils";
 import useGetVehicleByID from "@/queries/vehicle/get-vehicle-by-id";
 import useStore from "@/store/useStore";
 import { TUserStoreState, useUserStore } from "@/store/useUser";
@@ -18,9 +27,10 @@ import {
   ArrowLeft,
   CalendarDaysIcon,
   ChevronLeft,
-  ChevronRight,
+  Focus,
   MapIcon,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -41,7 +51,7 @@ export default function VehiclePaymentPage({
     (state) => state
   );
 
-  console.log(userStore);
+  console.log(vehicleStore);
 
   const onSubmit = () => {
     router.push("invoice/" + 1234567);
@@ -66,10 +76,28 @@ export default function VehiclePaymentPage({
               <ChevronLeft className="h-4 w-4" />
               <span className="sr-only">Previous</span>
             </Button>
-            <Button size="icon" variant="outline">
-              <ChevronRight className="h-4 w-4" />
-              <span className="sr-only">Next</span>
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="icon" variant="outline">
+                  <Focus className="h-4 w-4" />
+                  <span className="sr-only">Car view</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Look how hot is this. Sheeesh!</DialogTitle>
+                  <AspectRatio ratio={16 / 9} className="bg-muted">
+                    <Image
+                      src={vehicleStore.vehicle!.image}
+                      alt="Photo by Drew Beamer"
+                      fill
+                      sizes="100vw"
+                      className="rounded-md object-cover"
+                    />
+                  </AspectRatio>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
         <div className="flex flex-col md:grid md:grid-cols-6 gap-6">
@@ -118,7 +146,7 @@ export default function VehiclePaymentPage({
                     <ul className="list-disc pl-6">
                       {vehicleStore.rentForm?.services?.map((service) => (
                         <li key={service.id}>
-                          {service.option} - {service.price}$
+                          {service.option} - {formatPrice(service.price)}
                         </li>
                       ))}
                     </ul>
@@ -133,21 +161,32 @@ export default function VehiclePaymentPage({
               <CardContent className="grid gap-4">
                 <div className="flex items-center">
                   <div>Rental period</div>
-                  <div className="ml-auto">${vehicleStore.rentPrice}</div>
+                  <div className="ml-auto">
+                    {formatPrice(vehicleStore.rentPrice)}
+                  </div>
                 </div>
 
                 <div className="flex items-center">
                   <div>Add-ONS</div>
-                  <div className="ml-auto">${vehicleStore.servicesPrice}</div>
+                  <div className="ml-auto">
+                    {formatPrice(vehicleStore.servicesPrice)}
+                  </div>
                 </div>
-                <div className="flex items-center">
-                  <div>Discount</div>
-                  <div className="ml-auto">-${vehicleStore.discountPrice}</div>
-                </div>
+                {!!vehicleStore.discountPrice && (
+                  <div className="flex items-center">
+                    <div>Discount</div>
+                    <div className="ml-auto">
+                      {formatPrice(vehicleStore.discountPrice)}
+                    </div>
+                  </div>
+                )}
+
                 <Separator />
                 <div className="flex items-center font-medium">
                   <div>Total</div>
-                  <div className="ml-auto">${vehicleStore.totalPrice}</div>
+                  <div className="ml-auto">
+                    {formatPrice(vehicleStore.totalPrice)}
+                  </div>
                 </div>
               </CardContent>
               <CardFooter className="flex items-center gap-2">

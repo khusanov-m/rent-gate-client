@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { formatPrice } from "@/lib/utils";
 import useGetVehicleByID from "@/queries/vehicle/get-vehicle-by-id";
 import { vehicleRentSchema, type TVehicleRentSchema } from "@/schema/vehicle";
 import { useVehicleStore } from "@/store/useVehicle";
@@ -54,8 +55,8 @@ export default function RentForm({ id }: { id: string }) {
   const { setRentForm, setVehicle } = useVehicleStore();
 
   const onSubmit = (val: TVehicleRentSchema) => {
-    if (vehicle) setVehicle(vehicle);
     setRentForm(val);
+    if (vehicle) setVehicle(vehicle);
     router.push(`/vehicles/${id}/payment`);
   };
 
@@ -151,7 +152,7 @@ export default function RentForm({ id }: { id: string }) {
                                     />
                                   </FormControl>
                                   <FormLabel className="font-normal">
-                                    {item.option} +{item.price}$
+                                    {item.option} +{formatPrice(item.price)}
                                   </FormLabel>
                                 </FormItem>
                               );

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,9 +10,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { formatPrice } from "@/lib/utils";
+import useStore from "@/store/useStore";
+import { TVehicleStoreState, useVehicleStore } from "@/store/useVehicle";
 import Image from "next/image";
 
 export default function VehiclePaymentInvoicePage() {
+  const vehicleStore = useStore<TVehicleStoreState, TVehicleStoreState>(
+    useVehicleStore,
+    (state) => state
+  );
+  console.log(vehicleStore);
+
+  if (!vehicleStore) {
+    return <>NOT FOUND</>;
+  }
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen py-12 bg-gray-100 dark:bg-gray-900">
       <Card className="w-full max-w-3xl p-8 space-y-6">
@@ -55,20 +70,25 @@ export default function VehiclePaymentInvoicePage() {
           <div className="grid gap-4">
             <div className="flex items-center justify-between">
               <span>Rental Fee</span>
-              <span>$700.00</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span>Insurance</span>
-              <span>$100.00</span>
+              <span>{formatPrice(vehicleStore.rentPrice)}</span>
             </div>
             <div className="flex items-center justify-between">
               <span>Add-ons</span>
-              <span>$120.00</span>
+              <span>{formatPrice(vehicleStore.servicesPrice)}</span>
             </div>
+            {!!vehicleStore.discountPrice && (
+              <div className="flex items-center">
+                <div>Discount</div>
+                <div className="ml-auto">
+                  {formatPrice(vehicleStore.discountPrice)}
+                </div>
+              </div>
+            )}
+
             <Separator />
             <div className="flex items-center justify-between font-medium">
               <span>Total</span>
-              <span>$920.00</span>
+              <span>{formatPrice(vehicleStore.totalPrice)}</span>
             </div>
           </div>
         </CardContent>
