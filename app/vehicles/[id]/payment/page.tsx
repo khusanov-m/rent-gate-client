@@ -23,6 +23,7 @@ import useGetVehicleByID from "@/queries/vehicle/get-vehicle-by-id";
 import useStore from "@/store/useStore";
 import { TUserStoreState, useUserStore } from "@/store/useUser";
 import { useVehicleStore, type TVehicleStoreState } from "@/store/useVehicle";
+import { format } from "date-fns";
 import {
   ArrowLeft,
   CalendarDaysIcon,
@@ -88,10 +89,10 @@ export default function VehiclePaymentPage({
                   <DialogTitle>Look how hot is this. Sheeesh!</DialogTitle>
                   <AspectRatio ratio={16 / 9} className="bg-muted">
                     <Image
-                      src={vehicleStore.vehicle!.image}
+                      src={vehicleStore.vehicle?.image || "/placeholder.svg"}
                       alt="Photo by Drew Beamer"
                       fill
-                      sizes="100vw"
+                      sizes="100%"
                       className="rounded-md object-cover"
                     />
                   </AspectRatio>
@@ -118,14 +119,20 @@ export default function VehiclePaymentPage({
                     <CalendarDaysIcon className="h-6 w-6" />
                     <div>
                       <div className="font-medium">
-                        Pick-up:
-                        {vehicleStore.rentForm?.date &&
-                          vehicleStore.rentForm.date.from.toString()}
+                        Pick-up:{" "}
+                        {vehicleStore.rentForm?.date.from &&
+                          format(
+                            vehicleStore.rentForm?.date.from,
+                            "LLLL d, yyyy"
+                          )}
                       </div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">
-                        Drop-off:
-                        {vehicleStore.rentForm?.date?.to &&
-                          vehicleStore.rentForm?.date?.to.toString()}
+                        Drop-off:{" "}
+                        {vehicleStore.rentForm?.date.to &&
+                          format(
+                            vehicleStore.rentForm?.date.to,
+                            "LLLL d, yyyy"
+                          )}
                       </div>
                     </div>
                   </div>
@@ -262,10 +269,10 @@ export default function VehiclePaymentPage({
                 <CardHeader>
                   <CardTitle>Billing address</CardTitle>
                 </CardHeader>
-                <CardContent className="text-sm space-x-1">
-                  <span>{userStore?.billingAddress?.city}</span>,
-                  <span>{userStore?.billingAddress?.country}</span>,
-                  <span>{userStore?.billingAddress?.countryCode}</span>,
+                <CardContent className="text-sm">
+                  <span>{userStore?.billingAddress?.city}, </span>
+                  <span>{userStore?.billingAddress?.country}, </span>
+                  <span>{userStore?.billingAddress?.countryCode}, </span>
                   <span>{userStore?.billingAddress?.zip}</span>
                 </CardContent>
               </div>

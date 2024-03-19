@@ -33,7 +33,6 @@ export const useVehicleStore = create<TVehicleStoreState>()(
           get().rentForm?.date.to || 0,
           get().rentForm?.date.from || 0
         );
-        console.log(diffs);
 
         const rentPrice =
           diffs > 1
