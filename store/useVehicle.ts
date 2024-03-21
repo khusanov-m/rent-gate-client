@@ -11,6 +11,7 @@ export type TVehicleStoreState = {
   discountPrice: number;
   vehicle?: TVehicle;
   servicesPrice: number;
+  totalHours: number;
   setRentForm: (payload: TVehicleRentSchema) => void;
   setVehicle: (vehicle: TVehicle) => void;
   clearVehicle: () => void;
@@ -23,6 +24,7 @@ export const useVehicleStore = create<TVehicleStoreState>()(
       discountPrice: 0,
       rentPrice: 0,
       servicesPrice: 0,
+      totalHours: 0,
       setRentForm: (payload) => set({ rentForm: payload }),
       setVehicle: (vehicle) => {
         const servicesPrice = get().rentForm?.services.reduce(
@@ -40,7 +42,16 @@ export const useVehicleStore = create<TVehicleStoreState>()(
             : (get().vehicle?.price_per_hour || 0) * 24;
         const totalPrice =
           rentPrice + (servicesPrice || 0) - get().discountPrice;
-        return set({ vehicle, rentPrice, servicesPrice, totalPrice });
+
+        const totalHours = diffs > 1 ? diffs * 24 : 24;
+
+        return set({
+          vehicle,
+          rentPrice,
+          servicesPrice,
+          totalPrice,
+          totalHours,
+        });
       },
       clearVehicle: () => set({ vehicle: undefined }),
     }),

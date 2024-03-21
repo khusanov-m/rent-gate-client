@@ -1,6 +1,12 @@
 "use client";
 
 import { Icons } from "@/components/Icons";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,8 +23,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { formatPrice } from "@/lib/utils";
+import { MakePaymentAction } from "@/queries/payment/make-payment";
+import { MakeBookingAction } from "@/queries/payment/make-booking";
 import useGetVehicleByID from "@/queries/vehicle/get-vehicle-by-id";
 import useStore from "@/store/useStore";
 import { TUserStoreState, useUserStore } from "@/store/useUser";
@@ -27,13 +44,16 @@ import { format } from "date-fns";
 import {
   ArrowLeft,
   CalendarDaysIcon,
-  ChevronLeft,
+  ChevronsUpDown,
   Focus,
+  ListPlus,
+  Loader2,
   MapIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function VehiclePaymentPage({
   params,
@@ -52,10 +72,48 @@ export default function VehiclePaymentPage({
     (state) => state
   );
 
-  console.log(vehicleStore);
+  const { handleBooking, isPending, data, error } = MakeBookingAction();
 
   const onSubmit = () => {
-    router.push("invoice/" + 1234567);
+    if (vehicleStore?.rentForm?.paymentType)
+      handleBooking(
+        {
+          vehicleID: params.id,
+          payload: {
+            total_hours: vehicleStore?.totalHours,
+            payment_type: vehicleStore?.rentForm?.paymentType,
+          },
+        },
+        {
+          onSuccess: (data) => {
+            if (vehicleStore.rentForm?.paymentType === "cashless") {
+              router.push("invoice/" + data.id);
+            } else {
+              handlePayment(data.id, {
+                onSuccess: () => {
+                  router.push("invoice/" + data.id);
+                },
+                onError: (error) => {
+                  toast.error(
+                    error.message || "Something went wrong. Please try again."
+                  );
+                },
+              });
+            }
+          },
+          onError: (error) => {
+            toast.error(
+              error.message || "Something went wrong. Please try again."
+            );
+          },
+        }
+      );
+  };
+
+  const { handlePayment, isPending: isPaymentLoading } = MakePaymentAction();
+
+  const setPayment = (last4: string) => {
+    userStore?.setPayment(last4);
   };
 
   if (!vehicle || !vehicleStore) {
@@ -73,10 +131,6 @@ export default function VehiclePaymentPage({
 
           <h1 className="font-semibold text-lg md:text-xl">Vehicle Rental</h1>
           <div className="ml-auto flex items-center gap-2">
-            <Button size="icon" variant="outline">
-              <ChevronLeft className="h-4 w-4" />
-              <span className="sr-only">Previous</span>
-            </Button>
             <Dialog>
               <DialogTrigger asChild>
                 <Button size="icon" variant="outline">
@@ -85,7 +139,7 @@ export default function VehiclePaymentPage({
                 </Button>
               </DialogTrigger>
               <DialogContent>
-                <DialogHeader>
+                <DialogHeader className="space-y-3">
                   <DialogTitle>Look how hot is this. Sheeesh!</DialogTitle>
                   <AspectRatio ratio={16 / 9} className="bg-muted">
                     <Image
@@ -110,13 +164,13 @@ export default function VehiclePaymentPage({
               <CardContent>
                 <div className="grid gap-4">
                   <div className="flex items-center gap-2">
-                    <Icons.Car className="h-6 w-6" />
+                    <Icons.Car className="size-6" />
                     <div className="font-medium">
                       {vehicle.make} {vehicle.model}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CalendarDaysIcon className="h-6 w-6" />
+                    <CalendarDaysIcon className="size-6" />
                     <div>
                       <div className="font-medium">
                         Pick-up:{" "}
@@ -137,27 +191,36 @@ export default function VehiclePaymentPage({
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <MapIcon className="h-6 w-6" />
+                    <MapIcon className="size-6" />
                     <div>
                       <div className="font-medium">
                         Pick-up location: 123 Main St, Anytown, CA
                       </div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">
-                        Drop-off location: 456 Main St, Anytown, CA
+                        Drop-off location: 123 Main St, Anytown, CA
                       </div>
                     </div>
                   </div>
 
-                  <div>
-                    <p>List of ADD-ons:</p>
-                    <ul className="list-disc pl-6">
-                      {vehicleStore.rentForm?.services?.map((service) => (
-                        <li key={service.id}>
-                          {service.option} - {formatPrice(service.price)}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <Accordion type="single" collapsible>
+                    <AccordionItem value="item-1">
+                      <AccordionTrigger>
+                        <div className="flex items-center gap-2">
+                          <ListPlus className="size-6 flex-none" /> List of
+                          ADD-ons:
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <ul className="list-disc pl-6">
+                          {vehicleStore.rentForm?.services?.map((service) => (
+                            <li key={service.id}>
+                              {service.option} - {formatPrice(service.price)}
+                            </li>
+                          ))}
+                        </ul>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </div>
               </CardContent>
             </Card>
@@ -197,8 +260,19 @@ export default function VehiclePaymentPage({
                 </div>
               </CardContent>
               <CardFooter className="flex items-center gap-2">
-                <Button size="sm" variant="outline" onClick={onSubmit}>
-                  Submit Payment
+                <Button
+                  size="sm"
+                  onClick={onSubmit}
+                  disabled={isPending || isPaymentLoading}
+                >
+                  {isPending || isPaymentLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                      wait
+                    </>
+                  ) : (
+                    "Submit"
+                  )}
                 </Button>
 
                 <Button size="sm" variant="outline">
@@ -210,7 +284,7 @@ export default function VehiclePaymentPage({
           <div className="md:col-span-2 lg:col-span-3 xl:col-span-2 flex flex-col gap-6">
             <Card>
               <div>
-                <CardHeader className="flex flex-row items-center space-y-0">
+                <CardHeader className="flex-row items-center space-y-0">
                   <CardTitle>Customer</CardTitle>
                   <Button className="ml-auto" variant="secondary">
                     Edit
@@ -242,27 +316,100 @@ export default function VehiclePaymentPage({
                 </CardContent>
               </div>
               <Separator />
+              {vehicleStore.rentForm?.paymentType !== "cashless" ? (
+                <div>
+                  <CardHeader className="flex-row items-center space-y-0">
+                    <CardTitle>Payment method</CardTitle>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          size="icon"
+                          className="ml-auto"
+                          variant="outline"
+                        >
+                          <ChevronsUpDown className="size-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>My Cards</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                          {userStore?.userCards?.map((card) => (
+                            <DropdownMenuItem
+                              key={card.last4}
+                              className="gap-2"
+                            >
+                              <Button
+                                onClick={() => setPayment(card.last4)}
+                                variant={"ghost"}
+                                className="flex items-center justify-start gap-2 w-full p-0"
+                              >
+                                <Image
+                                  alt={card.brand || "payment provider"}
+                                  className="object-cover flex-none"
+                                  height="25"
+                                  src={
+                                    "/payment-providers/" + card.brand + ".svg"
+                                  }
+                                  width="40"
+                                />
+                                <span>**** **** **** {card.last4}</span>
+                              </Button>
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
 
-              <div>
-                <CardHeader>
-                  <CardTitle>Payment method</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm">
-                  <div>
-                    Card type:{" "}
-                    <span className="uppercase">
-                      {userStore?.payment?.brand}
-                    </span>
-                    <br />
-                    Card number: **** **** **** {userStore?.payment?.last4}
-                    <br />
-                    Card owner: {userStore?.user?.name}
-                    <br />
-                    Expiry: {userStore?.payment?.exp_month}/
-                    {userStore?.payment?.exp_year}
-                  </div>
-                </CardContent>
-              </div>
+                        <DropdownMenuItem>
+                          <Link href="/user/cards">Add new card</Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </CardHeader>
+                  <CardContent className="text-sm">
+                    <div className="space-y-1">
+                      <p className="flex items-center gap-2">
+                        Card number: **** **** ****{" "}
+                        {userStore?.selectedPayment?.last4}
+                        <Image
+                          alt={
+                            userStore?.selectedPayment?.brand ||
+                            "payment provider"
+                          }
+                          className="object-cover"
+                          height="25"
+                          src={
+                            "/payment-providers/" +
+                            userStore?.selectedPayment?.brand +
+                            ".svg"
+                          }
+                          width="40"
+                        />
+                      </p>
+                      <p>Card owner: {userStore?.user?.name}</p>
+                      <p>
+                        Expiry:{" "}
+                        {String(userStore?.selectedPayment?.exp_month).padStart(
+                          2,
+                          "0"
+                        )}
+                        /{userStore?.selectedPayment?.exp_year}
+                      </p>
+                    </div>
+                  </CardContent>
+                </div>
+              ) : (
+                <div>
+                  <CardHeader className="flex-row items-center space-y-0">
+                    <CardTitle>Payment method</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-sm">
+                    <div className="space-y-1">
+                      <p className="flex items-center gap-2">Cash</p>
+                    </div>
+                  </CardContent>
+                </div>
+              )}
 
               <Separator />
               <div>
@@ -270,10 +417,7 @@ export default function VehiclePaymentPage({
                   <CardTitle>Billing address</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm">
-                  <span>{userStore?.billingAddress?.city}, </span>
-                  <span>{userStore?.billingAddress?.country}, </span>
-                  <span>{userStore?.billingAddress?.countryCode}, </span>
-                  <span>{userStore?.billingAddress?.zip}</span>
+                  {userStore?.billingAddress?.address}
                 </CardContent>
               </div>
             </Card>

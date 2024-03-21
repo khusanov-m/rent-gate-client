@@ -5,7 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
 
-const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
+const MobileNav = ({
+  isAuth,
+  onLogout,
+}: {
+  isAuth: boolean;
+  onLogout: () => void;
+}) => {
   const [isOpen, setOpen] = React.useState(false);
 
   const toggleOpen = () => setOpen((prev) => !prev);
@@ -26,18 +32,18 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
     <div className="sm:hidden">
       <HamburgerMenuIcon
         onClick={toggleOpen}
-        className="relative z-50 h-5 w-5 text-zinc-700"
+        className="relative z-50 h-5 w-5 text-zinc-700 cursor-pointer"
       />
 
       {isOpen ? (
         <div className="fixed animate-in slide-in-from-top-5 fade-in-20 inset-0 z-0 w-full">
-          <ul className="absolute bg-white border-b border-zinc-200 shadow-xl grid w-full gap-3 px-10 pt-20 pb-8">
+          <ul className="absolute bg-white border-b border-zinc-200 shadow-xl grid w-full pt-20 px-2 pb-4">
             {!isAuth ? (
               <>
                 <li>
                   <Link
                     onClick={() => closeOnCurrent("/auth/sign-up")}
-                    className="flex items-center w-full font-semibold text-green-600"
+                    className="flex items-center w-full font-semibold transition-colors text-green-600 px-10 py-3 hover:bg-green-600 focus:bg-green-600 hover:text-white focus:text-white rounded"
                     href="/auth/sign-up"
                   >
                     Get started
@@ -48,7 +54,7 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                 <li>
                   <Link
                     onClick={() => closeOnCurrent("/auth/login")}
-                    className="flex items-center w-full font-semibold"
+                    className="flex items-center w-full font-semibold transition-colors px-10 py-3 rounded hover:bg-gray-300"
                     href="/auth/login"
                   >
                     Sign in
@@ -60,21 +66,21 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
               <>
                 <li>
                   <Link
-                    onClick={() => closeOnCurrent("/profile")}
-                    className="flex items-center w-full font-semibold"
-                    href="/profile"
+                    onClick={() => closeOnCurrent("/user/info")}
+                    className="flex items-center w-full font-semibold transition-colors px-10 py-3 rounded hover:bg-gray-300"
+                    href="/user/info"
                   >
                     Profile
                   </Link>
                 </li>
                 <li className="my-3 h-px w-full bg-gray-300" />
                 <li>
-                  <Link
-                    className="flex items-center w-full font-semibold"
-                    href="/sign-out"
+                  <button
+                    onClick={onLogout}
+                    className="flex items-center w-full font-semibold transition-colors px-10 py-3 rounded hover:bg-rose-600 focus:bg-rose-600 hover:text-white focus:text-white"
                   >
-                    Sign out
-                  </Link>
+                    Log out
+                  </button>
                 </li>
               </>
             )}

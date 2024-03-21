@@ -25,7 +25,7 @@ export type PaymentMethod = {
 export type UserBillingAddress = {
   // id: string;
   // user: string;
-  // address: string;
+  address: string;
   city: string;
   // state: string;
   zip: string;

@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-
 export const vehiclesFilterSchema = z.object({
   location: z.string(),
   priceMin: z.string().refine((val) => val === "" || /^\d+$/.test(val)),

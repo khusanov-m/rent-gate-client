@@ -1,8 +1,6 @@
 import { PersonIcon } from "@radix-ui/react-icons";
-import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Button } from "./ui/button";
 import {
@@ -17,25 +15,15 @@ type UserAccountNavProps = {
   email: string | undefined;
   name: string;
   imageUrl: string;
+  onLogout: () => void;
 };
 
-const UserAccountNav = ({ email, imageUrl, name }: UserAccountNavProps) => {
-  // load user subscription plan and check if user is subscribed or have active rental car
-  // const subscriptionPlan = await getUserSubscriptionPlan();
-  // const rentalCar = await getUserRentalCar();
-
-  const router = useRouter();
-  const queryClient = useQueryClient();
-
-  const onLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    queryClient.invalidateQueries({
-      queryKey: ["user"],
-    });
-    router.push("/");
-  };
-
+const UserAccountNav = ({
+  email,
+  imageUrl,
+  name,
+  onLogout,
+}: UserAccountNavProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="overflow-visible">
@@ -75,29 +63,8 @@ const UserAccountNav = ({ email, imageUrl, name }: UserAccountNavProps) => {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href="/dashboard">Dashboard</Link>
+          <Link href="/user/info">Profile</Link>
         </DropdownMenuItem>
-
-        {/* <DropdownMenuItem asChild>
-          {subscriptionPlan?.isSubscribed ? (
-            <Link href="/dashboard/billing">Manage Subscription</Link>
-          ) : (
-            <Link href="/pricing">
-              Upgrade{" "}
-              <SketchLogoIcon className="text-blue-600 h-4 w-4 ml-1.5" />
-            </Link>
-          )}
-        </DropdownMenuItem> */}
-
-        {/* <DropdownMenuItem asChild>
-          {rentalCar ? (
-            <Link href="/profile/rental">Manage rentals</Link>
-          ) : (
-            <Link href="/">
-              View vehicles
-            </Link>
-          )}
-        </DropdownMenuItem> */}
 
         <DropdownMenuSeparator />
 

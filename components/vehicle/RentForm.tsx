@@ -15,7 +15,7 @@ import { vehicleRentSchema, type TVehicleRentSchema } from "@/schema/vehicle";
 import { useVehicleStore } from "@/store/useVehicle";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PopoverTrigger } from "@radix-ui/react-popover";
-import { X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import {
@@ -45,13 +45,12 @@ export default function RentForm({ id }: { id: string }) {
     defaultValues: {
       vehicleId: id,
       date: undefined,
-      paymentType: "",
+      paymentType: undefined,
       services: [],
     },
   });
 
-  const { data: vehicle } = useGetVehicleByID(id);
-
+  const { data: vehicle, isLoading } = useGetVehicleByID(id);
   const { setRentForm, setVehicle } = useVehicleStore();
 
   const onSubmit = (val: TVehicleRentSchema) => {
@@ -74,6 +73,7 @@ export default function RentForm({ id }: { id: string }) {
               <FormField
                 control={form.control}
                 name="date"
+                disabled={isLoading}
                 render={(item) => (
                   <FormItem>
                     <FormLabel htmlFor="rent-dates">Select dates</FormLabel>
@@ -103,6 +103,7 @@ export default function RentForm({ id }: { id: string }) {
                 <PopoverContent align="start" className="space-y-2">
                   <FormField
                     control={form.control}
+                    disabled={isLoading}
                     name="services"
                     render={() => (
                       <FormItem>
@@ -175,32 +176,24 @@ export default function RentForm({ id }: { id: string }) {
                   <FormItem>
                     <FormLabel htmlFor="payment-type">Payment Type</FormLabel>
                     <FormControl>
-                      <div className="flex gap-2 items-center">
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select payment type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="cashless">Cash</SelectItem>
-                            <SelectItem value="credit">Credit Card</SelectItem>
-                            <SelectItem value="debit">Debit Card</SelectItem>
-                            <SelectItem value="paypal">PayPal</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          onClick={() => form.setValue("paymentType", "")}
-                        >
-                          <X />
-                        </Button>
-                      </div>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                        disabled={isLoading}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select payment type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="cashless">Cash</SelectItem>
+                          <SelectItem value="credit">Credit Card</SelectItem>
+                          <SelectItem value="debit">Debit Card</SelectItem>
+                          <SelectItem value="paypal">PayPal</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -209,8 +202,14 @@ export default function RentForm({ id }: { id: string }) {
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="ml-auto">
-              Book Now
+            <Button type="submit" className="ml-auto" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+                </>
+              ) : (
+                "Book Now"
+              )}
             </Button>
           </CardFooter>
         </Card>

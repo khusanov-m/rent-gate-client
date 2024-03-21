@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
+import type { TVehicle } from "@/types/vehicle.type";
 import { Fuel, Luggage, Navigation, UsersRound, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import type { TVehicle } from "@/types/vehicle.type";
 
 const VehicleItem = ({
   vehicle,
@@ -55,7 +55,12 @@ const VehicleItem = ({
             <Luggage size={20} /> {vehicle.luggage_capacity}kg
           </p>
           <p className="flex gap-2">
-            <Fuel size={20} /> {vehicle.power_type} <Zap size={20} />
+            {vehicle.power_type === "electric" ? (
+              <Zap size={20} />
+            ) : (
+              <Fuel size={20} />
+            )}
+            {vehicle.power_type}
           </p>
 
           <p className="flex gap-2">

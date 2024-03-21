@@ -1,7 +1,7 @@
 import Image from "next/image";
+import VehicleCategories from "../vehicle/VehicleCategories";
 import FeaturedFeed from "./FeaturedFeed";
 import RootSearchVehicle from "./RootSearchVehicle";
-import VehicleCategories from "../vehicle/VehicleCategories";
 
 const HomeHeader = () => {
   return (

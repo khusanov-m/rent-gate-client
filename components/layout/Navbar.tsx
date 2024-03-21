@@ -1,20 +1,23 @@
 "use client";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import useGetUserLocation from "@/queries/user/get-country";
 import useGetUserQuery from "@/queries/user/get-user";
 import useStore from "@/store/useStore";
 import { TUserStoreState, useUserStore } from "@/store/useUser";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import UserAccountNav from "../UserAccountNav";
+import { Badge } from "../ui/badge";
 import { buttonVariants } from "../ui/button";
 import MobileNav from "./MobileNav";
 
 export default function Navbar() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const { user, isLoading } = useGetUserQuery();
-  const { location } = useGetUserLocation();
 
   const userStore = useStore<TUserStoreState, TUserStoreState>(
     useUserStore,
@@ -26,6 +29,15 @@ export default function Navbar() {
       userStore?.setUser(user);
     }
   }, [user]);
+
+  const onLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    queryClient.invalidateQueries({
+      queryKey: ["user"],
+    });
+    router.push("/");
+  };
 
   const loaderView = (
     <>
@@ -56,18 +68,22 @@ export default function Navbar() {
   );
   const authenticatedView = (
     <>
-      <Link
-        href={"pricing"}
-        className={buttonVariants({
-          variant: "ghost",
-          size: "sm",
-        })}
-      >
-        Pricing
-      </Link>
+      <div>
+        <Link
+          href={"/subscription"}
+          className={buttonVariants({
+            variant: "ghost",
+            size: "sm",
+            className: "gap-1",
+          })}
+        >
+          Subscription
+        </Link>
+        <Badge>soon</Badge>
+      </div>
 
       <Link
-        href={"contacts"}
+        href={"/contacts"}
         className={buttonVariants({
           variant: "ghost",
           size: "sm",
@@ -80,6 +96,7 @@ export default function Navbar() {
         name={user?.name ?? ""}
         email={user?.email ?? ""}
         imageUrl={""}
+        onLogout={onLogout}
       />
     </>
   );
@@ -92,7 +109,7 @@ export default function Navbar() {
             <span>Rent Gate</span>
           </Link>
 
-          <MobileNav isAuth={!!user} />
+          <MobileNav isAuth={!!user} onLogout={onLogout} />
           <div className="hidden items-center space-x-4 sm:flex">
             {!user ? (isLoading ? loaderView : guestView) : authenticatedView}
           </div>
