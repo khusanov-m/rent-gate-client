@@ -81,6 +81,7 @@ export default function VehiclePaymentPage({
           vehicleID: params.id,
           payload: {
             total_hours: vehicleStore?.totalHours,
+            addons_with_discount_price: vehicleStore?.servicesPrice - vehicleStore?.discountPrice,
             payment_type: vehicleStore?.rentForm?.paymentType,
           },
         },
@@ -361,7 +362,7 @@ export default function VehiclePaymentPage({
                         <DropdownMenuSeparator />
 
                         <DropdownMenuItem>
-                          <Link href="/user/cards">Add new card</Link>
+                          <Link href="/user">Add new card</Link>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

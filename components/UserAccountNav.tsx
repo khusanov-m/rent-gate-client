@@ -63,7 +63,7 @@ const UserAccountNav = ({
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href="/user/info">Profile</Link>
+          <Link href="/user">Profile</Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />

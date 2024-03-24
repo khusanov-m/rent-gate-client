@@ -5,6 +5,7 @@ export type PaymentRequest = {
   vehicleID: string;
   payload: {
     total_hours: number;
+    addons_with_discount_price: number;
     payment_type: string;
   };
 };

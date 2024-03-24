@@ -13,6 +13,9 @@ const Footer = () => {
         <Link className="text-xs hover:underline underline-offset-4" href="faq">
           FAQ
         </Link>
+        <Link className="text-xs hover:underline underline-offset-4" href="career">
+          Career
+        </Link>
         <Link className="text-xs hover:underline underline-offset-4" href="terms">
           Terms of Service
         </Link>

@@ -66,9 +66,9 @@ const MobileNav = ({
               <>
                 <li>
                   <Link
-                    onClick={() => closeOnCurrent("/user/info")}
+                    onClick={() => closeOnCurrent("/user")}
                     className="flex items-center w-full font-semibold transition-colors px-10 py-3 rounded hover:bg-gray-300"
-                    href="/user/info"
+                    href="/user"
                   >
                     Profile
                   </Link>

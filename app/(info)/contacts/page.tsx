@@ -23,17 +23,17 @@ export default function ContactsPage() {
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <h4 className="text-lg font-semibold">Phone</h4>
-                    <p>(555) 123-4567</p>
+                    <p>+(998) 97 423-81-15</p>
                   </div>
 
                   <div className="space-y-2">
                     <h4 className="text-lg font-semibold">Email</h4>
-                    <p>info@example.com</p>
+                    <p>rentgate@gmail.com</p>
                   </div>
 
                   <div className="space-y-2">
                     <h4 className="text-lg font-semibold">Address</h4>
-                    <p>123 Street Rd, City, Country</p>
+                    <p>Imaginary Street Rd, Taskent city, Uzbekistan</p>
                   </div>
                 </div>
 

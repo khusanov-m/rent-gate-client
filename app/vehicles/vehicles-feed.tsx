@@ -14,14 +14,9 @@ import { Skeleton } from "../../components/ui/skeleton";
 import VehicleFilter from "../../components/vehicle/VehicleFilter";
 import VehicleItem from "../../components/vehicle/VehicleItem";
 import { SORT_BY_OPTIONS } from "../../components/vehicle/vehicle.const";
+import { getSearchParams } from "@/lib/utils";
 
-function getSearchParams(value: ReadonlyURLSearchParams) {
-  const params = new URLSearchParams();
-  value.forEach((value, key) => {
-    params.set(key, value);
-  });
-  return params;
-}
+
 
 export default function VehiclesFeed() {
   const searchParams = useSearchParams();

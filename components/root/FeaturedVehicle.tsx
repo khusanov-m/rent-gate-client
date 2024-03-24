@@ -1,41 +1,34 @@
+import { TVehicle } from "@/types/vehicle.type";
 import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
-import { Card, CardContent } from "../ui/card";
+import { Card, CardContent, CardHeader } from "../ui/card";
 
-const FeaturedVehicle = ({
-  vehicle,
-}: {
-  vehicle: {
-    id: string;
-    name: string;
-    description: string;
-    src: string;
-    alt: string;
-    price_per_day: number;
-    price_per_hour: number;
-  };
-}) => {
+const FeaturedVehicle = ({ vehicle }: { vehicle: TVehicle }) => {
   return (
-    <Card>
-      <CardContent>
+    <Card className="flex flex-col justify-between">
+      <CardHeader>
         <Image
-          alt={vehicle.alt}
+          alt={vehicle.make}
           className="w-full h-48 object-cover"
           height="200"
-          src={vehicle.src}
+          src={vehicle.image}
           style={{
             aspectRatio: "300/200",
             objectFit: "cover",
           }}
           width="300"
         />
-        <h3 className="mt-4 text-lg font-bold mb-2">{vehicle.name}</h3>
+        <h3 className="mt-4 text-lg font-bold mb-2">
+          {vehicle.make}
+          {vehicle.model}
+        </h3>
+      </CardHeader>
+      <CardContent>
         <div className="flex items-center justify-between gap-2">
           <p className="text-sm text-gray-500">
             <span>${vehicle.price_per_day}/day</span>
-            <sub>${vehicle.price_per_hour}/hour</sub>
           </p>
           <Link
             href={`/vehicles/${vehicle.id}`}

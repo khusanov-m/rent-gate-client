@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { Metadata } from "next";
+import { ReadonlyURLSearchParams } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -63,4 +64,12 @@ export function formatPrice(amount: string | number | undefined) {
     style: "currency",
     currency: "USD",
   }).format(Number(amount));
+}
+
+export function getSearchParams(value: ReadonlyURLSearchParams) {
+  const params = new URLSearchParams();
+  value.forEach((value, key) => {
+    params.set(key, value);
+  });
+  return params;
 }

@@ -3,18 +3,19 @@
 import { Avatar } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import AddCard from "@/components/user/add-card";
+import RentalHistory from "@/components/user/rental-history";
 import useStore from "@/store/useStore";
-import { type TUserStoreState, useUserStore } from "@/store/useUser";
+import { useUserStore, type TUserStoreState } from "@/store/useUser";
 import Image from "next/image";
 
-export default function UserInfoPage() {
+export default function UserInfo() {
   const userStore = useStore<TUserStoreState, TUserStoreState>(
     useUserStore,
     (state) => state
   );
 
   return (
-    <div className="w-full h-[calc(100svh-56px)] grid place-items-center">
+    <div className="w-full grid place-items-center px-2 py-4">
       <Card className="w-full max-w-3xl ">
         <CardHeader>
           <div className="flex items-center space-x-6">
@@ -85,6 +86,8 @@ export default function UserInfoPage() {
           </div>
         </CardContent>
       </Card>
+
+      <RentalHistory />
 
       <AddCard />
     </div>
